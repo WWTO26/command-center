@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team B Command Center</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f4f5;--card:#fff;--border:#e4e4e7;--border-light:#f0f0f0;
+  --text:#18181b;--text-2:#71717a;--text-3:#a1a1aa;
+  --blue:#2563eb;--blue-light:#eff6ff;--blue-mid:#dbeafe;
+  --green:#16a34a;--green-light:#f0fdf4;--green-mid:#dcfce7;
+  --amber:#d97706;--amber-light:#fffbeb;--amber-mid:#fef3c7;
+  --red:#dc2626;--red-light:#fef2f2;--red-mid:#fee2e2;
+  --purple:#7c3aed;--purple-light:#f5f3ff;--purple-mid:#ede9fe;
+  --radius:10px;--radius-sm:6px;--shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);min-height:100vh;padding:0}
+.app{max-width:900px;margin:0 auto;padding:1rem}
+
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+.header-left h1{font-size:20px;font-weight:700;color:var(--text)}
+.header-left p{font-size:13px;color:var(--text-2);margin-top:2px}
+.date-badge{font-size:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px 12px;color:var(--text-2)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:4px;margin-bottom:1.25rem}
+.tab-btn{flex:1;font-size:13px;padding:7px 8px;border-radius:var(--radius-sm);border:none;cursor:pointer;background:transparent;color:var(--text-2);font-weight:500;transition:all .15s}
+.tab-btn.active{background:var(--blue);color:#fff}
+.panel{display:none}.panel.active{display:block}
+
+/* SHIFT SETUP CARD */
+.setup-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:1.25rem;box-shadow:var(--shadow)}
+.setup-card h3{font-size:13px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.setup-item{background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px}
+.setup-item label{font-size:11px;color:var(--text-3);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.setup-item select,.setup-item input{width:100%;font-size:13px;padding:6px 8px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;color:var(--text)}
+
+/* ROLE ASSIGNMENT */
+.role-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.role-card{border-radius:var(--radius-sm);padding:10px 12px;border:1.5px solid var(--border);background:#fff;transition:all .15s}
+.role-card.role-pricing{border-color:#2563eb;background:var(--blue-light)}
+.role-card.role-bidding{border-color:#16a34a;background:var(--green-light)}
+.role-card.role-both{border-color:#7c3aed;background:var(--purple-light)}
+.role-card.role-off{border-color:var(--border);background:var(--bg);opacity:.5}
+.role-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.role-select{width:100%;font-size:12px;padding:4px 6px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;margin-top:4px}
+.role-badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:3px;font-weight:500;margin-top:4px}
+.rb-pricing{background:var(--blue-mid);color:var(--blue)}
+.rb-bidding{background:var(--green-mid);color:var(--green)}
+.rb-both{background:var(--purple-mid);color:var(--purple)}
+.rb-off{background:var(--border);color:var(--text-3)}
+
+/* MARGIN RULE BAR */
+.margin-bar{display:flex;align-items:center;gap:12px;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:var(--radius-sm);padding:8px 12px;flex-wrap:wrap}
+.margin-bar .mb-label{font-size:12px;color:var(--blue);font-weight:500}
+.margin-bar .mb-val{font-size:13px;font-weight:700;color:var(--blue)}
+.margin-bar .mb-rule{font-size:11px;color:var(--text-2);margin-left:auto;background:#fff;padding:2px 8px;border-radius:3px}
+
+/* LANE */
+.lane{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem;box-shadow:var(--shadow);overflow:hidden}
+.lane-head{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border-light)}
+.lane-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.ln1 .lane-num{background:var(--blue-mid);color:var(--blue)}
+.ln2 .lane-num{background:var(--green-mid);color:var(--green)}
+.ln3 .lane-num{background:var(--purple-mid);color:var(--purple)}
+.lane-title-wrap{flex:1}
+.lane-title{font-size:14px;font-weight:600;color:var(--text)}
+.lane-sub{font-size:12px;color:var(--text-2);margin-top:1px}
+.lane-meta{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0}
+.lane-owner{font-size:11px;padding:2px 8px;border-radius:3px;font-weight:500}
+.lo-pricing{background:var(--blue-mid);color:var(--blue)}
+.lo-bidding{background:var(--green-mid);color:var(--green)}
+.lo-both{background:var(--purple-mid);color:var(--purple)}
+.time-chip{font-size:11px;color:var(--text-3);background:var(--bg);padding:2px 8px;border-radius:3px;white-space:nowrap}
+.lane-prog{height:3px;background:var(--border);overflow:hidden}
+.lane-prog-fill{height:3px;transition:width .3s}
+.lp-blue{background:var(--blue)}.lp-green{background:var(--green)}.lp-purple{background:var(--purple)}
+.lane-body{padding:8px 16px}
+
+/* TASK */
+.task{display:flex;align-items:flex-start;gap:10px;padding:10px 8px;border-radius:var(--radius-sm);cursor:pointer;transition:background .1s;border-left:2px solid transparent;margin-bottom:2px}
+.task:hover{background:var(--bg)}
+.task.done{opacity:.45}
+.task.done .t-main{text-decoration:line-through;color:var(--text-3)}
+.task.done .t-sub{color:var(--text-3)}
+.task.urgent{border-left-color:var(--red)}
+.task.important{border-left-color:var(--amber)}
+.task.info{border-left-color:var(--blue)}
+.cb{width:19px;height:19px;border-radius:5px;border:1.5px solid #d4d4d8;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:#fff}
+.cb.chk{border-color:transparent}
+.cb.chk::after{content:'';width:11px;height:7px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(-45deg) translateY(-1px);display:block}
+.ln1 .cb.chk{background:var(--blue)}
+.ln2 .cb.chk{background:var(--green)}
+.ln3 .cb.chk{background:var(--purple)}
+.t-wrap{flex:1;min-width:0}
+.t-main{font-size:13px;color:var(--text);line-height:1.45;font-weight:500}
+.t-sub{font-size:11px;color:var(--text-2);margin-top:3px;line-height:1.55}
+.t-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.ttag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:3px;font-weight:500}
+.tt-req{background:var(--red-mid);color:var(--red)}
+.tt-watch{background:var(--blue-mid);color:var(--blue)}
+.tt-weekly{background:var(--amber-mid);color:var(--amber)}
+.tt-urgent{background:var(--red-mid);color:var(--red)}
+.tt-exposure{background:var(--amber-mid);color:var(--amber)}
+.tt-both{background:var(--purple-mid);color:var(--purple)}
+
+/* LANE 3 ASSIGNMENT */
+.assign-section{padding:10px 16px;border-top:1px solid var(--border-light)}
+.assign-label{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.assign-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.assign-col{background:var(--bg);border-radius:var(--radius-sm);padding:8px 10px;border:1px solid var(--border)}
+.ac-head{font-size:12px;font-weight:600;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--border-light)}
+.ac-j .ac-head{color:var(--green)}
+.ac-m .ac-head{color:var(--amber)}
+.ac-p .ac-head{color:var(--blue)}
+.assign-task-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.assign-task-row .cb-sm{width:15px;height:15px;border-radius:3px;border:1.5px solid #d4d4d8;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#fff;transition:all .15s}
+.ac-j .assign-task-row .cb-sm.chk{background:var(--green);border-color:var(--green)}
+.ac-m .assign-task-row .cb-sm.chk{background:var(--amber);border-color:var(--amber)}
+.ac-p .assign-task-row .cb-sm.chk{background:var(--blue);border-color:var(--blue)}
+.assign-task-row .cb-sm.chk::after{content:'';width:8px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px);display:block}
+.assign-task-row input{flex:1;font-size:11px;padding:3px 6px;border-radius:4px;border:1px solid var(--border);background:#fff;color:var(--text)}
+.assign-task-row input.struck{text-decoration:line-through;color:var(--text-3)}
+.assign-task-row .del-x{font-size:15px;color:var(--text-3);cursor:pointer;background:none;border:none;line-height:1;flex-shrink:0}
+.assign-task-row .del-x:hover{color:var(--red)}
+.add-task-btn{width:100%;font-size:11px;padding:4px;border:1px dashed var(--border);border-radius:4px;background:#fff;color:var(--text-3);cursor:pointer;margin-top:2px;text-align:center}
+.add-task-btn:hover{border-color:var(--purple);color:var(--purple)}
+
+/* ESCALATION */
+.esc-box{background:var(--red-light);border:1px solid var(--red-mid);border-left:3px solid var(--red);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;margin-bottom:1rem}
+.esc-box .esc-title{font-size:13px;font-weight:600;color:var(--red);margin-bottom:6px}
+.esc-item{font-size:12px;color:#7f1d1d;padding:2px 0;display:flex;gap:6px}
+.esc-item::before{content:'→';color:var(--red);flex-shrink:0}
+
+/* HANDOFF */
+.handoff-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:1rem;box-shadow:var(--shadow)}
+.handoff-card h3{font-size:13px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.handoff-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.handoff-item{background:var(--bg);border-radius:var(--radius-sm);padding:8px 10px}
+.handoff-item label{font-size:11px;color:var(--text-3);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.handoff-item textarea{width:100%;font-size:12px;border:none;background:transparent;color:var(--text);resize:none;font-family:inherit;outline:none;min-height:48px}
+
+/* PROGRESS OVERVIEW */
+.prog-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.25rem}
+.prog-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;text-align:center;box-shadow:var(--shadow)}
+.prog-card .pc-label{font-size:11px;color:var(--text-3);margin-bottom:4px}
+.prog-card .pc-val{font-size:22px;font-weight:700}
+.prog-card .pc-sub{font-size:11px;color:var(--text-3);margin-top:2px}
+.pc-blue{color:var(--blue)}.pc-green{color:var(--green)}.pc-purple{color:var(--purple)}
+
+/* BOTTOM BAR */
+.bottom-bar{display:flex;gap:8px;flex-wrap:wrap;padding-top:1rem;border-top:1px solid var(--border);margin-top:1rem;align-items:center}
+.bottom-bar button{font-size:13px;padding:8px 14px;cursor:pointer;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--card);color:var(--text)}
+.btn-primary{background:var(--blue)!important;color:#fff!important;border-color:var(--blue)!important}
+.btn-ghost{color:var(--text-3)!important;margin-left:auto}
+
+/* MARKET DIRECTION TAB */
+.dir-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:1rem;box-shadow:var(--shadow)}
+.dir-card h3{font-size:13px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.dir-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+.dir-inp-group{background:var(--bg);border-radius:var(--radius-sm);padding:8px 10px}
+.dir-inp-group label{font-size:11px;color:var(--text-3);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.dir-inp-group select{width:100%;font-size:13px;padding:6px 8px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;color:var(--text)}
+.dir-result{border-radius:var(--radius-sm);padding:12px 14px;font-size:14px;font-weight:600;transition:all .2s}
+.dr-default{background:var(--bg);color:var(--text-3)}
+.dr-up{background:var(--green-light);color:var(--green);border:1px solid var(--green-mid)}
+.dr-down{background:var(--red-light);color:var(--red);border:1px solid var(--red-mid)}
+.dr-flat{background:var(--amber-light);color:var(--amber);border:1px solid var(--amber-mid)}
+.dr-sub{font-size:12px;font-weight:400;margin-top:4px;opacity:.8}
+.dir-table-wrap{overflow-x:auto;margin-top:1rem}
+.dir-table{width:100%;border-collapse:collapse;font-size:12px}
+.dir-table th{font-size:11px;font-weight:600;color:var(--text-2);text-align:left;padding:6px 8px;background:var(--bg);border-bottom:1px solid var(--border)}
+.dir-table td{padding:6px 8px;border-bottom:1px solid var(--border-light);color:var(--text-2)}
+.dir-table tr.highlight td{background:var(--blue-light);color:var(--text)}
+.res-up{color:var(--green);font-weight:600}
+.res-down{color:var(--red);font-weight:600}
+.res-flat{color:var(--amber);font-weight:600}
+.res-collapse{color:var(--red);font-weight:600;font-style:italic}
+
+/* LOG TAB */
+.log-form{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:1rem;box-shadow:var(--shadow)}
+.log-form h3{font-size:13px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.log-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.log-field{display:flex;flex-direction:column;gap:4px}
+.log-field label{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em}
+.log-field select,.log-field input,.log-field textarea{font-size:13px;padding:6px 8px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;color:var(--text)}
+.log-field textarea{min-height:52px;resize:vertical}
+.lane-done-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.ld-btn{font-size:12px;padding:5px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);cursor:pointer;background:#fff;color:var(--text-2)}
+.ld-btn.on-1{background:var(--blue-mid);color:var(--blue);border-color:var(--blue)}
+.ld-btn.on-2{background:var(--green-mid);color:var(--green);border-color:var(--green)}
+.ld-btn.on-3{background:var(--purple-mid);color:var(--purple);border-color:var(--purple)}
+.log-table-wrap{overflow-x:auto}
+.log-table{width:100%;border-collapse:collapse;font-size:12px}
+.log-table th{font-size:11px;font-weight:600;color:var(--text-2);text-align:left;padding:7px 8px;background:var(--bg);border-bottom:1px solid var(--border)}
+.log-table td{padding:7px 8px;border-bottom:1px solid var(--border-light);vertical-align:top;color:var(--text-2)}
+.person-pill{display:inline-block;font-size:11px;padding:1px 8px;border-radius:3px;font-weight:600}
+.pp-j{background:var(--green-mid);color:var(--green)}
+.pp-m{background:var(--amber-mid);color:var(--amber)}
+.pp-p{background:var(--blue-mid);color:var(--blue)}
+.lp-small{display:inline-block;font-size:10px;padding:1px 5px;border-radius:2px;margin:1px;font-weight:500}
+.lps1{background:var(--blue-mid);color:var(--blue)}
+.lps2{background:var(--green-mid);color:var(--green)}
+.lps3{background:var(--purple-mid);color:var(--purple)}
+.flag-chip{display:inline-block;font-size:10px;padding:1px 6px;border-radius:3px;background:var(--red-mid);color:var(--red);font-weight:500}
+.empty-log{text-align:center;padding:2rem;color:var(--text-3);font-size:13px}
+
+/* SETUP MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal-box{background:#fff;border-radius:14px;padding:24px;width:min(560px,100%);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-box h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px}
+.modal-box .modal-sub{font-size:13px;color:var(--text-2);margin-bottom:20px}
+.modal-section{margin-bottom:18px}
+.modal-section label{font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+.modal-section select{width:100%;font-size:13px;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;color:var(--text)}
+.role-assign-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.role-assign-item{background:var(--bg);border-radius:var(--radius-sm);padding:8px 10px;border:1px solid var(--border)}
+.role-assign-item .ra-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:5px}
+.role-assign-item select{width:100%;font-size:12px;padding:4px 6px;border-radius:4px;border:1px solid var(--border);background:#fff}
+.task-assign-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.task-assign-col{background:var(--bg);border-radius:var(--radius-sm);padding:8px 10px;border:1px solid var(--border)}
+.task-assign-col .tac-name{font-size:12px;font-weight:600;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.tac-j .tac-name{color:var(--green)}
+.tac-m .tac-name{color:var(--amber)}
+.tac-p .tac-name{color:var(--blue)}
+.task-assign-col textarea{width:100%;font-size:11px;padding:5px 7px;border-radius:4px;border:1px solid var(--border);background:#fff;resize:vertical;min-height:80px;font-family:inherit;line-height:1.6}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+.modal-footer button{font-size:13px;padding:9px 20px;border-radius:var(--radius-sm);cursor:pointer;font-weight:500}
+.btn-start{background:var(--blue);color:#fff;border:none}
+.btn-start:hover{background:#1d4ed8}
+.btn-skip{background:#fff;color:var(--text-2);border:1px solid var(--border)}
+.modal-day-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:0}
+.day-option{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;cursor:pointer;text-align:center;background:#fff;transition:all .15s}
+.day-option:hover{border-color:var(--blue);background:var(--blue-light)}
+.day-option.selected-fs{border-color:#16a34a;background:var(--green-light)}
+.day-option.selected-wts{border-color:#d97706;background:var(--amber-light)}
+.day-option.selected-mt{border-color:#dc2626;background:var(--red-light)}
+.day-option .do-label{font-size:12px;font-weight:600;color:var(--text)}
+.day-option .do-sub{font-size:10px;color:var(--text-3);margin-top:2px}
+
+
+.handoff-item textarea{min-height:44px;height:auto;overflow:hidden;resize:none;}
+
+/* RECURRING TASKS */
+.task-recurring{position:relative;}
+.recurring-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:10px;background:#fef3c7;color:#92400e;font-weight:600;margin-left:6px;vertical-align:middle;border:1px solid #fde68a}
+.recurring-badge.active{background:#dcfce7;color:#166534;border-color:#bbf7d0}
+.recurring-timer{font-size:10px;color:#6b7280;margin-left:4px}
+.task-recurring.needs-review{background:#fffbeb;border-left:2px solid #f59e0b !important;}
+.task-recurring.needs-review .t-main{color:#92400e}
+
+.task-counter-wrap{display:inline-flex;align-items:center;gap:6px;margin-left:8px;vertical-align:middle}
+.task-counter{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--blue-mid);color:var(--blue);font-size:11px;font-weight:700;border:1.5px solid var(--blue);transition:all .2s}
+.task-counter.zero{background:var(--bg);color:var(--text-3);border-color:var(--border)}
+.task-counter.good{background:var(--green-mid);color:var(--green);border-color:var(--green)}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SHIFT SETUP MODAL -->
+  <div class="modal-overlay" id="setupModal">
+    <div class="modal-box">
+      <h2>🏁 Set up today's shift</h2>
+      <div class="modal-sub">Fill this in before sending the file to your team — or skip to open the last saved shift.</div>
+
+      <div class="modal-section">
+        <label>Day of week</label>
+        <div class="modal-day-grid">
+          <div class="day-option" id="dopt-fs" onclick="selectModalDay('fs')">
+            <div class="do-label">Fri / Sat</div>
+            <div class="do-sub">Great days — push</div>
+          </div>
+          <div class="day-option" id="dopt-wts" onclick="selectModalDay('wts')">
+            <div class="do-label">Wed / Thu</div>
+            <div class="do-sub">Intermediate nights</div>
+          </div>
+          <div class="day-option" id="dopt-mt" onclick="selectModalDay('mt')">
+            <div class="do-label">Mon / Tue / Sun</div>
+            <div class="do-sub">Be careful</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <label>Role assignment</label>
+        <div class="role-assign-grid">
+          <div class="role-assign-item">
+            <div class="ra-name">Peter T</div>
+            <select id="modal-role-j">
+              <option value="off">Off today</option>
+              <option value="pricing">Pricing</option>
+              <option value="bidding">Bidding</option>
+              <option value="both">Both</option>
+            </select>
+          </div>
+          <div class="role-assign-item">
+            <div class="ra-name">Mark</div>
+            <select id="modal-role-m">
+              <option value="off">Off today</option>
+              <option value="pricing">Pricing</option>
+              <option value="bidding">Bidding</option>
+              <option value="both">Both</option>
+            </select>
+          </div>
+          <div class="role-assign-item">
+            <div class="ra-name">Peter Y</div>
+            <select id="modal-role-p">
+              <option value="off">Off today</option>
+              <option value="pricing">Pricing</option>
+              <option value="bidding">Bidding</option>
+              <option value="both">Both</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <label>Background tasks (Lane 3) — one task per line</label>
+        <div class="task-assign-grid">
+          <div class="task-assign-col tac-j">
+            <div class="tac-name">Peter T</div>
+            <textarea id="modal-tasks-j" placeholder="e.g. Set up Don Omar tour&#10;Set up Bruno Mars tour"></textarea>
+          </div>
+          <div class="task-assign-col tac-m">
+            <div class="tac-name">Mark</div>
+            <textarea id="modal-tasks-m" placeholder="e.g. Yankee Stadium zones&#10;Stale inventory review"></textarea>
+          </div>
+          <div class="task-assign-col tac-p">
+            <div class="tac-name">Peter Y</div>
+            <textarea id="modal-tasks-p" placeholder="e.g. Tampa Bay zones"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-skip" onclick="skipSetup()">Skip — load last saved shift</button>
+        <button class="btn-start" onclick="applySetup()">Start shift ✓</button>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- PRE-SHIFT LOADED BANNER -->
+    <div id="preShiftBanner" style="display:none;background:#16a34a;border-radius:var(--radius);padding:10px 16px;margin-bottom:1rem;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:13px;font-weight:600;color:#fff">✓ Shift setup loaded automatically</span>
+      <span style="font-size:12px;color:rgba(255,255,255,.8)">Day, roles and tasks assigned by manager</span>
+      <button onclick="document.getElementById('setupModal').style.display='flex'" style="margin-left:auto;font-size:12px;padding:4px 12px;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;cursor:pointer">Edit setup</button>
+    </div>
+
+    <!-- USER SELECTOR -->
+    <div id="userBar" style="background:var(--blue);border-radius:var(--radius);padding:10px 16px;margin-bottom:1rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span style="font-size:13px;font-weight:600;color:#fff">Who are you?</span>
+      <select id="userSelect" onchange="setUser(this.value)" style="font-size:13px;padding:6px 12px;border-radius:var(--radius-sm);border:none;font-weight:500;min-width:140px">
+        <option value="">Select your name</option>
+            <option value="peter_y">Peter Y</option>
+            <option value="peter_t">Peter T</option>
+            <option value="mark">Mark</option>
+      </select>
+      <span id="userGreeting" style="font-size:13px;color:rgba(255,255,255,0.8);margin-left:4px"></span>
+      <span style="margin-left:auto;font-size:11px;color:rgba(255,255,255,0.6)">Team B · Worldwide Tickets</span>
+    </div>
+
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Team B Command Center</h1>
+      <p>Peter Y · Peter T · Mark — Worldwide Tickets</p>
+    </div>
+    <div class="date-badge" id="dateBadge"></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('shift')">Shift</button>
+    <button class="tab-btn" onclick="switchTab('market')">Market Advice</button>
+    
+  </div>
+
+  <!-- ==================== SHIFT PANEL ==================== -->
+  <div class="panel active" id="panel-shift">
+
+    <!-- SETUP CARD -->
+    <div class="setup-card">
+      <h3>Shift setup — fill this in before the shift starts</h3>
+      <div class="setup-grid">
+        <div class="setup-item">
+          <label>Day of week</label>
+          <select id="daySelect" onchange="updateMarginBar()">
+            <option value="">Select day</option>
+            <option value="fs">Friday or Saturday</option>
+            <option value="wts">Wednesday or Thursday</option>
+            <option value="mt">Monday, Tuesday, or Sunday</option>
+          </select>
+        </div>
+        <div class="setup-item">
+          <label>Overlap shift today?</label>
+          <select id="overlapSelect" onchange="updateRoles()">
+            <option value="no">No — single person on</option>
+            <option value="yes">Yes — two people overlapping</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="marginBar" class="margin-bar" style="margin-bottom:14px;display:none">
+        <span class="mb-label">Today's margin rule:</span>
+        <span class="mb-val" id="mbVal">—</span>
+        <span class="mb-rule" id="mbRule">—</span>
+      </div>
+
+      <!-- ROLE ASSIGNMENT -->
+      <div style="font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Role assignment</div>
+      <div class="role-row">
+        <div class="role-card" id="roleJ">
+          <div class="role-name">Peter T</div>
+          <select class="role-select" id="roleJsel" onchange="setRole('j',this.value)">
+            <option value="off">Off today</option>
+            <option value="pricing">Pricing work</option>
+            <option value="bidding">Bidding work</option>
+            <option value="both">Both (solo)</option>
+          </select>
+          <div><span class="role-badge rb-off" id="roleBadgeJ">Off</span></div>
+        </div>
+        <div class="role-card" id="roleM">
+          <div class="role-name">Mark</div>
+          <select class="role-select" id="roleMsel" onchange="setRole('m',this.value)">
+            <option value="off">Off today</option>
+            <option value="pricing">Pricing work</option>
+            <option value="bidding">Bidding work</option>
+            <option value="both">Both (solo)</option>
+          </select>
+          <div><span class="role-badge rb-off" id="roleBadgeM">Off</span></div>
+        </div>
+        <div class="role-card" id="roleP">
+          <div class="role-name">Peter Y</div>
+          <select class="role-select" id="rolePsel" onchange="setRole('p',this.value)">
+            <option value="off">Off today</option>
+            <option value="pricing">Pricing work</option>
+            <option value="bidding">Bidding work</option>
+            <option value="both">Both (solo)</option>
+          </select>
+          <div><span class="role-badge rb-off" id="roleBadgeP">Off</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRESS OVERVIEW -->
+    <div class="prog-overview" style="grid-template-columns:1fr 1fr">
+      <div class="prog-card"><div class="pc-label">Lane 1 — Pricing</div><div class="pc-val pc-blue" id="prog1">0/5</div><div class="pc-sub" id="own1">—</div></div>
+      <div class="prog-card"><div class="pc-label">Lane 2 — Bidding</div><div class="pc-val pc-green" id="prog2">0/4</div><div class="pc-sub" id="own2">—</div></div>
+    </div>
+
+    <!-- LANE 1 -->
+    <div class="lane ln1">
+      <div class="lane-head">
+        <div class="lane-num">1</div>
+        <div class="lane-title-wrap">
+          <div class="lane-title">Pricing work — unpriced & near-term inventory</div>
+          <div class="lane-sub">Work through this continuously. Never consider the shift done until this is clean.</div>
+        </div>
+        <div class="lane-meta">
+          <span class="lane-owner lo-pricing" id="l1owner">—</span>
+          
+        </div>
+      </div>
+      <div class="lane-prog"><div class="lane-prog-fill lp-blue" id="lp1" style="width:0%"></div></div>
+      <div class="lane-body">
+        <div class="task urgent" data-id="1" onclick="toggle(1)">
+          <div class="cb" id="cb1"></div>
+          <div class="t-wrap">
+            <div class="t-main">Open the territory sheet — scan today's events before touching anything</div>
+            <div class="t-sub">Know what's on, what's near-term, and what needs attention first. Identify the priority events for today.</div>
+          </div>
+        </div>
+        <div class="task urgent" data-id="2" data-recurring="5" onclick="toggle(2)" class="task task-recurring">
+          <div class="cb" id="cb2"></div>
+          <div class="t-wrap">
+            <div class="t-main">Pull up unpriced inventory — everything that came in and hasn't been set up yet <span class="task-counter-wrap"><span class="task-counter zero" id="counter-2" title="Times completed this shift">0</span></span><span class="recurring-badge" id="rbadge2">↺ 5:00</span></div>
+            <div class="t-sub">Check your accepted offers to see what's coming in. This is a recurring task — keep cycling back to it throughout your shift.</div>
+          </div>
+        </div>
+        <div data-id="3" data-recurring="30" onclick="toggle(3)" class="task task-recurring">
+          <div class="cb" id="cb3"></div>
+          <div class="t-wrap">
+            <div class="t-main">Review near-term inventory that's already priced <span class="task-counter-wrap"><span class="task-counter zero" id="counter-3" title="Times completed this shift">0</span></span><span class="recurring-badge" id="rbadge3">↺ 30:00</span></div>
+            <div class="t-sub">When was it last touched? Is the pricing strategy still valid? If bids are set in a way that won't make money, communicate to the bidding person or manager so we can stop accumulating inventory at the wrong cost.
+            <div class="t-tags"><span class="ttag tt-watch">Check bids too</span></div></div>
+          </div>
+        </div>
+        <div class="task important" data-id="4" onclick="toggle(4)">
+          <div class="cb" id="cb4"></div>
+          <div class="t-wrap">
+            <div class="t-main">Analyze each event — is it going up or down?</div>
+            <div class="t-sub">Check sales velocity, supply, and price direction on SG. Use the Market Direction tab to identify the signal. What day of week is the event? Friday/Saturday = be more aggressive. Monday/Tuesday = be more defensive. Price accordingly.
+            <div class="t-tags"><span class="ttag tt-watch">Use market direction tool</span></div></div>
+          </div>
+        </div>
+        <div data-id="5" data-recurring="30" onclick="toggle(5)" class="task task-recurring">
+          <div class="cb" id="cb5"></div>
+          <div class="t-wrap">
+            <div class="t-main">Check SG — where are tickets actually trading vs where you're listed? <span class="recurring-badge" id="rbadge5">↺ 30:00</span></div>
+            <div class="t-sub">Listed price ≠ sale price. If the gap is wide, your margin means nothing. Price to where things are moving, not where people are asking. Confirm new inventory is selling within 30 min of going live.
+            <div class="t-tags"><span class="ttag tt-watch">Check sell-through at 30 min</span></div></div>
+          </div>
+        </div>
+        <div class="task task-recurring" data-id="12" data-recurring="30" onclick="toggle(12)">
+          <div class="cb" id="cb12"></div>
+          <div class="t-wrap">
+            <div class="t-main">Split check <span class="task-counter-wrap"><span class="task-counter zero" id="counter-12" title="Times completed this shift">0</span></span><span class="recurring-badge" id="rbadge12">↺ 30:00</span></div>
+            <div class="t-sub">Do packs have value? Should you put a no split on them? If something's not moving, consider switching to full split for near-term inventory — it will help you sell faster. Also check the splits on already priced inventory — are they set correctly?
+            <div class="t-tags"><span class="ttag tt-watch">Revisit throughout shift</span></div></div>
+          </div>
+        </div>
+        <div class="task urgent" data-id="10" onclick="toggle(10)">
+          <div class="cb" id="cb10"></div>
+          <div class="t-wrap">
+            <div class="t-main">Before you end your shift — review tomorrow's events and next-day inventory</div>
+            <div class="t-sub">What are we having trouble selling for tomorrow? Any afternoon or matinee events that could collapse overnight? Morning events and matinees drop fast — make sure pricing is right before you close out. Don't let the next person wake up with bad inventory.
+            <div class="t-tags"><span class="ttag tt-urgent">End of shift</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LANE 2 -->
+    <div class="lane ln2">
+      <div class="lane-head">
+        <div class="lane-num">2</div>
+        <div class="lane-title-wrap">
+          <div class="lane-title">Bidding work — find the opportunity</div>
+          <div class="lane-sub">Are you bidding too low? Where's the edge? Don't skip this lane.</div>
+        </div>
+        <div class="lane-meta">
+          <span class="lane-owner lo-bidding" id="l2owner">—</span>
+          
+        </div>
+      </div>
+      <div class="lane-prog"><div class="lane-prog-fill lp-green" id="lp2" style="width:0%"></div></div>
+      <div class="lane-body">
+        <div data-id="6" data-recurring="30" onclick="toggle(6)" class="task task-recurring">
+          <div class="cb" id="cb6"></div>
+          <div class="t-wrap">
+            <div class="t-main">Go through events where you're bidding but not winning — why not? <span class="task-counter-wrap"><span class="task-counter zero" id="counter-6" title="Times completed this shift">0</span></span><span class="recurring-badge" id="rbadge6">↺ 30:00</span></div>
+            <div class="t-sub">Is your max price below market? Can you push the margin down and test? Don't let winning inventory sit on the table because you didn't check.</div>
+          </div>
+        </div>
+        <div class="task important" data-id="7" onclick="toggle(7)">
+          <div class="cb" id="cb7"></div>
+          <div class="t-wrap">
+            <div class="t-main">Getting upper bowl but not floor? Cross-check the zone setup</div>
+            <div class="t-sub">Floor is worth more but may be non-liquid. Are you bidding aggressively enough? Are you exposed to getting something super high? Review your max bid and zone config before pushing harder on floor zones.
+            <div class="t-tags"><span class="ttag tt-exposure">Exposure check</span></div></div>
+          </div>
+        </div>
+        <div class="task task-recurring" data-id="13" data-recurring="30" onclick="toggle(13)">
+          <div class="cb" id="cb13"></div>
+          <div class="t-wrap">
+            <div class="t-main">Singles vs pairs — are we accumulating too many singles? <span class="recurring-badge" id="rbadge13">↺ 30:00</span></div>
+            <div class="t-sub">Are we not getting anything 2+? Check your bid config per event. Is the singles market way below pairs? If so, consider turning singles off — but keep in mind to always leave singles on for GA zones.
+            <div class="t-tags"><span class="ttag tt-watch">Decision required per event</span></div></div>
+          </div>
+        </div>
+        <div class="task info" data-id="8" onclick="toggle(8)">
+          <div class="cb" id="cb8"></div>
+          <div class="t-wrap">
+            <div class="t-main">Look for the same act across multiple dates — if one show is moving, check the others</div>
+            <div class="t-sub">Same act behaves similarly across dates. Pitbull selling well today → check tomorrow's Pitbull. Morgan Wallen moving fast → check the rest of his dates. Don't let patterns sit unused.
+            <div class="t-tags"><span class="ttag tt-watch">Pattern check</span></div></div>
+          </div>
+        </div>
+        <div class="task important" data-id="9" onclick="toggle(9)">
+          <div class="cb" id="cb9"></div>
+          <div class="t-wrap">
+            <div class="t-main">Flag anything you want to bid more aggressively on — post to group chat first</div>
+            <div class="t-sub">Don't quietly change strategy on a big event. Post: "Thinking of pushing [event] harder — [reason]." Let the manager/Scot weigh in. Never make big moves in silence.
+            <div class="t-tags"><span class="ttag tt-watch">Group chat first</span></div></div>
+          </div>
+        </div>
+        <div class="task urgent" data-id="11" onclick="toggle(11)">
+          <div class="cb" id="cb11"></div>
+          <div class="t-wrap">
+            <div class="t-main">Before you end your shift — check tomorrow's bids for events at risk of collapsing</div>
+            <div class="t-sub">Look at afternoon shows, matinees, and any event where we have trouble selling. Are our bids still live and set correctly? Matinees and early-day events drop fast overnight. Adjust bids down now on anything that looks shaky so we don't wake up overexposed.
+            <div class="t-tags"><span class="ttag tt-urgent">End of shift</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- LANE 3 -->
+    <div class="lane ln3">
+      <div class="lane-head">
+        <div class="lane-num">3</div>
+        <div class="lane-title-wrap">
+          <div class="lane-title">Assigned background work — when you have bandwidth</div>
+          <div class="lane-sub">Not urgent today but moves the operation forward. Peter Y assigns below.</div>
+        </div>
+        <div class="lane-meta">
+          
+        </div>
+      </div>
+      <div class="lane-prog"><div class="lane-prog-fill lp-purple" id="lp3" style="width:0%"></div></div>
+      <div class="assign-section">
+        <div class="assign-label">Manager assigns tasks per person below — they work through their column independently</div>
+        <div class="assign-cols">
+          <div class="assign-col ac-j">
+            <div class="ac-head">Peter T</div>
+            <div id="atasks-j"></div>
+            <button class="add-task-btn" onclick="addAssignTask('j')">+ Add task</button>
+          </div>
+          <div class="assign-col ac-m">
+            <div class="ac-head">Mark</div>
+            <div id="atasks-m"></div>
+            <button class="add-task-btn" onclick="addAssignTask('m')">+ Add task</button>
+          </div>
+          <div class="assign-col ac-p">
+            <div class="ac-head">Peter Y</div>
+            <div id="atasks-p"></div>
+            <button class="add-task-btn" onclick="addAssignTask('p')">+ Add task</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ESCALATION -->
+    <div class="esc-box">
+      <div class="esc-title">⚠ Always escalate to manager / Scot when:</div>
+      <div class="esc-item">You want a different strategy than today's standard margins — post in group chat first, don't just change it</div>
+      <div class="esc-item">A zone is way off market and you're not sure whether to reprice or hold — ask before you act</div>
+      <div class="esc-item">An event looks unusually strong and you think you can push harder — flag it, don't assume</div>
+      <div class="esc-item">You're about to make a pricing move on a big act that could affect multiple shows</div>
+    </div>
+
+    <!-- HANDOFF -->
+    <div class="handoff-card">
+      <h3>End of shift handoff — post this in group chat</h3>
+      <div class="handoff-grid">
+        <div class="handoff-item"><label>New inventory priced today</label><textarea placeholder="e.g. Pitbull Miami 3 zones, KATSEYE floors"></textarea></div>
+        <div class="handoff-item"><label>Anything not moving / needs eyes</label><textarea placeholder="e.g. Rod Stewart floor zone stuck at $400"></textarea></div>
+        <div class="handoff-item"><label>Bidding opportunities flagged</label><textarea placeholder="e.g. Morgan Wallen Fri looks strong — pushing harder"></textarea></div>
+        <div class="handoff-item"><label>Open items for next shift</label><textarea placeholder="e.g. Stale inventory on Jelly Roll — needs a decision"></textarea></div>
+      </div>
+    </div>
+
+
+    <!-- SCREENSHOT REMINDER -->
+    <div style="background:var(--bg);border-radius:var(--radius-sm);padding:8px 14px;margin-bottom:1rem;border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px">
+      <span style="font-size:16px">📸</span>
+      <span style="font-size:13px;color:var(--text-2)">Take a screenshot of this page and drop it in the Teams group chat as your shift record.</span>
+    </div>
+      
+    </div>
+    <div class="bottom-bar">
+      <button class="btn-primary" onclick="window.open('https://docs.google.com/spreadsheets/d/17XEsm61aEHqwLwyRXtPk9m9ZnNJ1DLQMTBr2hzcGQ6c/edit','_blank')">Open shift log ↗</button>
+      <button onclick="switchTab('market')">Check market direction ↗</button>
+      <button class="btn-ghost" onclick="resetShift()">↺ Reset shift</button>
+      <button id="airtableBtn" onclick="submitToAirtable()" style="font-size:13px;padding:8px 18px;border-radius:6px;border:none;background:#6366f1;color:#fff;cursor:pointer;font-weight:600;margin-left:auto">Save shift to Airtable ↗</button>
+    </div>
+
+  </div>
+
+  <!-- ==================== MARKET DIRECTION PANEL ==================== -->
+  <div class="panel" id="panel-market">
+    <div class="dir-card">
+      <h3>Market direction &amp; advice</h3>
+      <div style="font-size:12px;color:var(--text-2);background:var(--bg);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:12px;line-height:1.7;border-left:3px solid var(--blue)">
+        Use this as a guide — not a rule. Select what you're seeing on Uptick right now: sales velocity, supply of listings, and price movement. The tool tells you the likely direction and what to do. When in doubt, always check with the manager before making big moves.
+      </div>
+      <div class="dir-inputs">
+        <div class="dir-inp-group">
+          <label>Sales velocity</label>
+          <select id="dSale" onchange="calcDir()">
+            <option value="">Select</option>
+            <option value="up">↑ Up</option>
+            <option value="down">↓ Down</option>
+            <option value="flat">→ Flat</option>
+          </select>
+        </div>
+        <div class="dir-inp-group">
+          <label>Supply</label>
+          <select id="dSupply" onchange="calcDir()">
+            <option value="">Select</option>
+            <option value="up">↑ Up (more listings)</option>
+            <option value="down">↓ Down (fewer listings)</option>
+            <option value="flat">→ Flat</option>
+          </select>
+        </div>
+        <div class="dir-inp-group">
+          <label>Price movement</label>
+          <select id="dPrice" onchange="calcDir()">
+            <option value="">Select</option>
+            <option value="up">↑ Up</option>
+            <option value="down">↓ Down</option>
+            <option value="flat">→ Flat</option>
+          </select>
+        </div>
+      </div>
+      <div class="dir-result dr-default" id="dirResult">
+        <div>Select all three signals above to get market direction and what to do.</div>
+      </div>
+    </div>
+    <div class="dir-card">
+      <h3>Full reference table</h3>
+      <div class="dir-table-wrap">
+        <table class="dir-table"><thead><tr><th>Sales</th><th>Supply</th><th>Price</th><th>Direction</th><th>Action</th></tr></thead>
+        <tbody id="dirTableBody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LOG PANEL ==================== -->
+  <div class="panel" id="panel-log">
+    <div class="log-form">
+      <h3>Log a shift — fill in at end of shift</h3>
+      <div class="log-grid">
+        <div class="log-field"><label>Person</label>
+          <select id="lPerson"><option value="">Select</option><option value="j">Peter T</option><option value="m">Mark</option><option value="p">Peter Y</option></select>
+        </div>
+        <div class="log-field"><label>Date</label><input type="text" id="lDate" placeholder="e.g. Jun 8, 2026"></div>
+        <div class="log-field"><label>Inventory priced</label><input type="text" id="lInv" placeholder="e.g. Pitbull Miami, KATSEYE floors"></div>
+        <div class="log-field"><label>Flags / issues</label><input type="text" id="lFlags" placeholder="e.g. Rod Stewart floor stuck at $400"></div>
+      </div>
+      <div style="font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Lanes completed</div>
+      <div class="lane-done-row">
+        <button class="ld-btn" id="ld1" onclick="toggleLaneDone(1)">Lane 1 — Pricing</button>
+        <button class="ld-btn" id="ld2" onclick="toggleLaneDone(2)">Lane 2 — Bidding</button>
+        <button class="ld-btn" id="ld3" onclick="toggleLaneDone(3)">Lane 3 — Background</button>
+      </div>
+      <div class="log-field" style="margin-bottom:10px"><label>Notes for next shift</label><textarea id="lNotes" placeholder="Open items, things to watch, anything Peter Y needs to know..."></textarea></div>
+      <button class="btn-primary" style="font-size:13px;padding:8px 18px;cursor:pointer;border-radius:6px;border:none;margin-top:4px" onclick="addLog()">Save log entry</button>
+    </div>
+    <div id="logTableWrap"></div>
+  </div>
+
+</div>
+
+<script>
+// ===== STATE =====
+var checked=new Set();
+var laneOf={1:1,2:1,3:1,4:1,5:1,6:2,7:2,8:2,9:2};
+var laneCounts={1:7,2:6};
+var roles={j:'off',m:'off',p:'off'};
+var assignTasks={j:[],m:[],p:[]};
+var taskCtr=0;
+
+function addAssignTask(p){
+  var id='at'+(++taskCtr);
+  assignTasks[p].push({id:id,text:'',done:false});
+  renderAssignTasks(p);
+  setTimeout(function(){var el=document.getElementById('inp-'+id);if(el)el.focus();},50);
+}
+function toggleAssignTask(p,id){
+  var t=null;
+  for(var i=0;i<assignTasks[p].length;i++){if(assignTasks[p][i].id===id){t=assignTasks[p][i];break;}}
+  if(!t)return;
+  t.done=!t.done;
+  var cb=document.getElementById('acb-'+id);
+  var inp=document.getElementById('inp-'+id);
+  if(cb)cb.classList.toggle('chk',t.done);
+  if(inp)inp.classList.toggle('struck',t.done);
+  updateProgress();
+  saveState();
+}
+function deleteAssignTask(p,id){
+  var newArr=[];
+  for(var i=0;i<assignTasks[p].length;i++){if(assignTasks[p][i].id!==id)newArr.push(assignTasks[p][i]);}
+  assignTasks[p]=newArr;
+  renderAssignTasks(p);
+  updateProgress();
+}
+function updateAssignText(p,id,v){
+  for(var i=0;i<assignTasks[p].length;i++){if(assignTasks[p][i].id===id){assignTasks[p][i].text=v;break;}}
+  saveState();
+}
+function renderAssignTasks(p){
+  var el=document.getElementById('atasks-'+p);
+  if(!el)return;
+  var html='';
+  for(var i=0;i<assignTasks[p].length;i++){
+    var t=assignTasks[p][i];
+    html+='<div class="assign-task-row">';
+    html+='<div class="cb-sm '+(t.done?'chk':'')+'" id="acb-'+t.id+'" onclick="toggleAssignTask(\''+p+'\',\''+t.id+'\')"></div>';
+    html+='<input type="text" id="inp-'+t.id+'" value="'+t.text+'" placeholder="Task..." class="'+(t.done?'struck':'')+'" oninput="updateAssignText(\''+p+'\',\''+t.id+'\',this.value)" onkeydown="if(event.key===\'Enter\')addAssignTask(\''+p+'\')">';
+    html+='<button class="del-x" onclick="deleteAssignTask(\''+p+'\',\''+t.id+'\')">x</button>';
+    html+='</div>';
+  }
+  el.innerHTML=html;
+}
+var laneDone={1:false,2:false,3:false};
+var logs=[];
+
+// ===== TABS =====
+function switchTab(t){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['shift','market'][i]===t));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+t).classList.add('active');
+}
+
+// ===== MARGIN BAR =====
+var marginRules={
+  fs:{val:'Great days — push if you can',rule:'Fri / Sat · Strong buyer activity, be aggressive'},
+  wts:{val:'Could be okay — intermediate nights',rule:'Wed / Thu · Moderate activity, read the market'},
+  mt:{val:'Be careful — these days are not great for late buyers',rule:'Mon / Tue / Sun · Slow days, be defensive'}
+};
+function updateMarginBar(){
+  const v=document.getElementById('daySelect').value;
+  const bar=document.getElementById('marginBar');
+  if(!v){bar.style.display='none';return;}
+  bar.style.display='flex';
+  document.getElementById('mbVal').textContent=marginRules[v].val;
+  document.getElementById('mbRule').textContent=marginRules[v].rule;
+}
+
+// ===== ROLES =====
+var roleLabels={pricing:'Pricing',bidding:'Bidding',both:'Both (solo)',off:'Off'};
+var roleBadgeClass={pricing:'rb-pricing',bidding:'rb-bidding',both:'rb-both',off:'rb-off'};
+var roleCardClass={pricing:'role-pricing',bidding:'role-bidding',both:'role-both',off:'role-off'};
+function setRole(p,val){
+  roles[p]=val;
+  const P=p.toUpperCase();
+  const badge=document.getElementById('roleBadge'+P);
+  badge.textContent=roleLabels[val];
+  badge.className='role-badge '+roleBadgeClass[val];
+  document.getElementById('role'+P).className='role-card '+roleCardClass[val];
+  updateLaneOwners();
+}
+function updateLaneOwners(){
+  const pricers=Object.entries(roles).filter(([k,v])=>v==='pricing'||v==='both').map(([k])=>k==='j'?'Peter T':k==='m'?'Mark':'Peter Y');
+  const bidders=Object.entries(roles).filter(([k,v])=>v==='bidding'||v==='both').map(([k])=>k==='j'?'Peter T':k==='m'?'Mark':'Peter Y');
+  document.getElementById('l1owner').textContent=pricers.length?pricers.join(' + '):'Unassigned';
+  document.getElementById('l2owner').textContent=bidders.length?bidders.join(' + '):'Unassigned';
+  const allActive=Object.entries(roles).filter(([k,v])=>v!=='off').map(([k])=>k==='j'?'Peter T':k==='m'?'Mark':'Peter Y');
+  document.getElementById('l1owner').className='lane-owner '+(pricers.length?'lo-pricing':'lo-bidding');
+  document.getElementById('l2owner').className='lane-owner '+(bidders.length?'lo-bidding':'lo-pricing');
+  document.getElementById('own1').textContent=pricers.length?pricers.join(' + '):'—';
+  document.getElementById('own2').textContent=bidders.length?bidders.join(' + '):'—';
+}
+function updateRoles(){ saveState(); }
+
+// ===== TASKS =====
+function toggle(id){
+  var cb=document.getElementById('cb'+id);
+  var task=cb.closest('.task');
+  if(checked.has(id)){checked.delete(id);cb.classList.remove('chk');task.classList.remove('done');}
+  else{
+    checked.add(id);cb.classList.add('chk');task.classList.add('done');
+    if(recurringCounts.hasOwnProperty(id)){incrementCounter(id);}
+  }
+  updateProgress();
+  saveState();
+}
+function updateProgress(){
+  [1,2].forEach(ln=>{
+    const total=laneCounts[ln];
+    var done=[...checked].filter(function(id){return laneOf[id]===ln;}).length;
+    var pct=Math.round((done/total)*100);
+    document.getElementById('lp'+ln).style.width=pct+'%';
+    document.getElementById('prog'+ln).textContent=done+'/'+total;
+  });
+  var l3total=0,l3done=0;
+  ['j','m','p'].forEach(function(p){for(var i=0;i<assignTasks[p].length;i++){l3total++;if(assignTasks[p][i].done)l3done++;}});
+  var l3pct=l3total>0?Math.round((l3done/l3total)*100):0;
+  if(document.getElementById('lp3'))document.getElementById('lp3').style.width=l3pct+'%';
+}
+
+// ===== MARKET DIRECTION =====
+var matrix=[
+  ['up','up','up','flat','Hold — don\'t push harder, market will flatten'],
+  ['up','up','down','flat','Hold current strategy, market finding equilibrium'],
+  ['up','up','flat','down','Be defensive — more supply coming, expect price to drop'],
+  ['up','down','up','up','Be aggressive — strong signal, price moving up'],
+  ['up','down','down','up (potential spike)','Push bids — supply falling with strong sales = spike potential'],
+  ['up','down','flat','up (spike)','Act now — classic spike setup, move fast'],
+  ['up','flat','up','up (potential spike)','Lean aggressive, sales strong and price rising'],
+  ['up','flat','down','flat','Hold — mixed signals, monitor closely'],
+  ['up','flat','flat','up','Positive signal — can push slightly harder'],
+  ['down','up','up','down (collapse)','Cut bids and reprice down — collapse likely'],
+  ['down','up','down','down','Be defensive, reduce exposure'],
+  ['down','up','flat','down (collapse)','High risk — cut bids, consider killing offers'],
+  ['down','down','up','flat','Mixed — hold, watch velocity'],
+  ['down','down','down','down','Reduce exposure, don\'t accumulate more'],
+  ['down','down','flat','down (collapse)','Exit or cut — all signals negative'],
+  ['down','flat','up','down','Be cautious — sales dropping despite price rise'],
+  ['down','flat','down','down','Reduce bids and price down'],
+  ['down','flat','flat','down (collapse)','Cut positions — no positive signals'],
+  ['flat','up','up','down','Supply outpacing demand — price will fall'],
+  ['flat','up','down','down','Weakening — reduce exposure'],
+  ['flat','up','flat','down (collapse)','Be defensive — supply pressure building'],
+  ['flat','down','up','up (potential spike)','Watch closely — supply tightening with price up'],
+  ['flat','down','down','flat','Balanced — hold strategy'],
+  ['flat','down','flat','flat','Neutral — hold current position'],
+  ['flat','flat','up','up','Price rising on its own — can lean aggressive'],
+  ['flat','flat','down','down','Price softening — adjust down'],
+  ['flat','flat','flat','flat','Stable — hold current strategy']
+];
+function resClass(r){
+  if(r.includes('collapse'))return 'res-collapse';
+  if(r.includes('up'))return 'res-up';
+  if(r.includes('down'))return 'res-down';
+  return 'res-flat';
+}
+function buildDirTable(){
+  var tbody=document.getElementById('dirTableBody');
+  var html='';
+  for(var i=0;i<matrix.length;i++){
+    var r=matrix[i];
+    var rowId='drow-'+r[0]+'-'+r[1]+'-'+r[2];
+    html+='<tr id="'+rowId+'">';
+    html+='<td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td>';
+    html+='<td class="'+resClass(r[3])+'">'+r[3]+'</td>';
+    html+='<td style="color:var(--text-2);font-size:11px">'+r[4]+'</td>';
+    html+='</tr>';
+  }
+  tbody.innerHTML=html;
+}
+function calcDir(){
+  var s=document.getElementById('dSale').value;
+  var su=document.getElementById('dSupply').value;
+  var p=document.getElementById('dPrice').value;
+  var box=document.getElementById('dirResult');
+  var rows=document.querySelectorAll('.dir-table tbody tr');
+  for(var i=0;i<rows.length;i++)rows[i].classList.remove('highlight');
+  if(!s||!su||!p){
+    box.className='dir-result dr-default';
+    box.innerHTML='<div>Select all three signals to get direction.</div>';
+    return;
+  }
+  var match=null;
+  for(var i=0;i<matrix.length;i++){
+    if(matrix[i][0]===s&&matrix[i][1]===su&&matrix[i][2]===p){match=matrix[i];break;}
+  }
+  if(!match)return;
+  var rowId='drow-'+s+'-'+su+'-'+p;
+  var row=document.getElementById(rowId);
+  if(row){row.classList.add('highlight');row.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  var res=match[3];
+  var action=match[4];
+  var cls=(res.indexOf('collapse')>-1||res.indexOf('down')>-1)?'dr-down':(res.indexOf('up')>-1?'dr-up':'dr-flat');
+  box.className='dir-result '+cls;
+  box.innerHTML='<div>Direction: <strong>'+res+'</strong></div><div class="dr-sub">'+action+'</div>';
+}
+
+// ===== LOG =====
+function toggleLaneDone(n){
+  laneDone[n]=!laneDone[n];
+  const btn=document.getElementById('ld'+n);
+  btn.className='ld-btn'+(laneDone[n]?' on-'+n:'');
+}
+function addLog(){
+  const p=document.getElementById('lPerson').value;
+  const d=document.getElementById('lDate').value;
+  if(!p||!d)return;
+  logs.unshift({
+    person:p,date:d,
+    inv:document.getElementById('lInv').value,
+    flags:document.getElementById('lFlags').value,
+    notes:document.getElementById('lNotes').value,
+    lanes:Object.entries(laneDone).filter(([k,v])=>v).map(([k])=>parseInt(k)),
+    time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})
+  });
+  ['lPerson','lDate','lInv','lFlags','lNotes'].forEach(id=>document.getElementById(id).value='');
+  [1,2,3].forEach(n=>{laneDone[n]=false;document.getElementById('ld'+n).className='ld-btn';});
+  renderLogs();
+}
+function saveToLog(){
+  switchTab('log');
+  const p=Object.entries(roles).find(([k,v])=>v!=='off');
+  if(p)document.getElementById('lPerson').value=p[0];
+  document.getElementById('lDate').value=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+function renderLogs(){
+  var el=document.getElementById('logTableWrap');
+  if(!logs.length){el.innerHTML='<div class="empty-log">No shifts logged yet. Complete a shift and hit Save to shift log.</div>';return;}
+  var html='<div style="overflow-x:auto"><table class="log-table"><thead><tr><th>Date</th><th>Time</th><th>Person</th><th>Lanes</th><th>Inventory priced</th><th>Flags</th><th>Notes</th></tr></thead><tbody>';
+  for(var i=0;i<logs.length;i++){
+    var l=logs[i];
+    var pname=l.person==='j'?'Peter T':l.person==='m'?'Mark':'Peter Y';
+    var lanesHtml='';
+    if(l.lanes&&l.lanes.length){for(var j=0;j<l.lanes.length;j++)lanesHtml+='<span class="lp-small lps'+l.lanes[j]+'">L'+l.lanes[j]+'</span>';}
+    else{lanesHtml='—';}
+    var flagHtml=l.flags?'<span class="flag-chip">'+l.flags+'</span>':'—';
+    html+='<tr>';
+    html+='<td>'+l.date+'</td>';
+    html+='<td style="color:var(--text-3)">'+l.time+'</td>';
+    html+='<td><span class="person-pill pp-'+l.person+'">'+pname+'</span></td>';
+    html+='<td>'+lanesHtml+'</td>';
+    html+='<td>'+(l.inv||'—')+'</td>';
+    html+='<td>'+flagHtml+'</td>';
+    html+='<td style="font-size:11px;max-width:180px;white-space:normal">'+(l.notes||'—')+'</td>';
+    html+='</tr>';
+  }
+  html+='</tbody></table></div>';
+  el.innerHTML=html;
+}
+function resetShift(){
+  clearState();
+  checked.clear();
+  Object.keys(recurringCounts).forEach(function(k){recurringCounts[k]=0;});
+  updateAllCounters();
+  for(var i=1;i<=9;i++){var cb=document.getElementById('cb'+i);if(cb){cb.classList.remove('chk');cb.closest('.task').classList.remove('done');}}
+  assignTasks={j:[],m:[],p:[]};
+  ['j','m','p'].forEach(function(p){renderAssignTasks(p);setRole(p,'off');document.getElementById('role'+p.toUpperCase()+'sel').value='off';});
+  document.getElementById('daySelect').value='';
+  document.getElementById('marginBar').style.display='none';
+  updateProgress();
+}
+
+
+// ===== LOCAL STORAGE PERSISTENCE =====
+var STORAGE_KEY = "team_b_shift_state";
+
+function saveState(){
+  try {
+    var state = {
+      checked: Array.from(checked),
+      recurringCounts: recurringCounts,
+      assignTasks: assignTasks,
+      roles: roles,
+      daySelect: document.getElementById('daySelect') ? document.getElementById('daySelect').value : '',
+      overlapSelect: document.getElementById('overlapSelect') ? document.getElementById('overlapSelect').value : '',
+      savedAt: new Date().toLocaleTimeString()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    var ind = document.getElementById('saveIndicator');
+    if(ind){ ind.textContent = 'Auto-saved at ' + state.savedAt; ind.style.opacity='1'; setTimeout(function(){ind.style.opacity='0';}, 2000); }
+  } catch(e){ console.log('Save failed', e); }
+}
+
+function loadState(){
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return false;
+    var state = JSON.parse(raw);
+    // Restore checked tasks
+    if(state.checked){
+      state.checked.forEach(function(id){
+        checked.add(id);
+        var cb = document.getElementById('cb'+id);
+        var task = cb ? cb.closest('.task') : null;
+        if(cb) cb.classList.add('chk');
+        if(task) task.classList.add('done');
+      });
+    }
+    // Restore assign tasks
+    if(state.recurringCounts){
+      recurringCounts = state.recurringCounts;
+      updateAllCounters();
+    }
+    if(state.assignTasks){
+      assignTasks = state.assignTasks;
+      ['j','m','p'].forEach(function(p){ renderAssignTasks(p); });
+    }
+    // Restore roles
+    if(state.roles){
+      Object.keys(state.roles).forEach(function(p){
+        var val = state.roles[p];
+        var sel = document.getElementById('role'+p.toUpperCase()+'sel');
+        if(sel){ sel.value = val; setRole(p, val); }
+      });
+    }
+    // Restore day select
+    if(state.daySelect){
+      var ds = document.getElementById('daySelect');
+      if(ds){ ds.value = state.daySelect; updateMarginBar(); }
+    }
+    updateProgress();
+    var ind = document.getElementById('saveIndicator');
+    if(ind && state.savedAt){ ind.textContent = 'Restored from ' + state.savedAt; ind.style.opacity='1'; setTimeout(function(){ind.style.opacity='0';},3000); }
+    return true;
+  } catch(e){ console.log('Load failed', e); return false; }
+}
+
+function clearState(){
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+
+function setUser(val){
+  var greeting = document.getElementById('userGreeting');
+  if(!val){ greeting.textContent = ''; return; }
+  var name = document.getElementById('userSelect').options[document.getElementById('userSelect').selectedIndex].text;
+  greeting.textContent = 'Hey ' + name + ' — have a great shift!';
+  try { localStorage.setItem('current_user_team_b', val); } catch(e){}
+}
+
+// ===== SETUP MODAL =====
+var selectedModalDay = '';
+
+function selectModalDay(val){
+  selectedModalDay = val;
+  ['fs','wts','mt'].forEach(function(d){
+    var el = document.getElementById('dopt-'+d);
+    if(el) el.className = 'day-option' + (d===val ? ' selected-'+d : '');
+  });
+}
+
+function applySetup(){
+  // Day
+  if(selectedModalDay){
+    var ds = document.getElementById('daySelect');
+    if(ds){ ds.value = selectedModalDay; updateMarginBar(); }
+  }
+  // Roles
+  ['j','m','p'].forEach(function(p){
+    var sel = document.getElementById('modal-role-'+p);
+    var mainSel = document.getElementById('role'+p.toUpperCase()+'sel');
+    if(sel && mainSel){ mainSel.value = sel.value; setRole(p, sel.value); }
+  });
+  // Tasks
+  var taskCounter = Date.now();
+  ['j','m','p'].forEach(function(p){
+    var ta = document.getElementById('modal-tasks-'+p);
+    if(ta && ta.value.trim()){
+      var lines = ta.value.trim().split('\n').filter(function(l){ return l.trim(); });
+      assignTasks[p] = lines.map(function(line, i){
+        return {id:'setup_'+p+'_'+i+'_'+taskCounter, text:line.trim(), done:false};
+      });
+    } else {
+      assignTasks[p] = [];
+    }
+    renderAssignTasks(p);
+  });
+  updateProgress();
+  saveState();
+  document.getElementById('setupModal').style.display = 'none';
+}
+
+function skipSetup(){
+  document.getElementById('setupModal').style.display = 'none';
+  loadState();
+}
+
+
+
+// ===== RECURRING TASKS =====
+var recurringIntervals = {};
+
+function startRecurringTimers(){
+  var tasks = document.querySelectorAll('.task-recurring');
+  tasks.forEach(function(task){
+    var taskId = task.getAttribute('data-id');
+    var minutes = parseInt(task.getAttribute('data-recurring') || '30');
+    var seconds = minutes * 60;
+    var badge = document.getElementById('rbadge' + taskId);
+    if(!badge) return;
+
+    function tick(){
+      if(seconds <= 0){
+        // Reset the task
+        checked.delete(parseInt(taskId));
+        var cb = document.getElementById('cb' + taskId);
+        if(cb){ cb.classList.remove('chk'); }
+        task.classList.remove('done');
+        task.classList.add('needs-review');
+        badge.textContent = '↺ Review now';
+        badge.className = 'recurring-badge';
+        seconds = minutes * 60;
+        saveState();
+      } else {
+        var m = Math.floor(seconds / 60);
+        var s = seconds % 60;
+        badge.textContent = '↺ ' + m + ':' + (s < 10 ? '0' : '') + s;
+        badge.className = 'recurring-badge active';
+        task.classList.remove('needs-review');
+      }
+      seconds--;
+    }
+
+    tick();
+    recurringIntervals[taskId] = setInterval(tick, 1000);
+  });
+}
+
+
+// ===== RECURRING TASK COUNTERS =====
+var recurringCounts = {2:0, 3:0, 6:0, 12:0};
+
+function incrementCounter(taskId){
+  if(recurringCounts.hasOwnProperty(taskId)){
+    recurringCounts[taskId]++;
+    updateCounterDisplay(taskId);
+    saveState();
+  }
+}
+
+function updateCounterDisplay(taskId){
+  var el = document.getElementById('counter-'+taskId);
+  if(!el) return;
+  var count = recurringCounts[taskId] || 0;
+  el.textContent = count;
+  el.className = 'task-counter' + (count === 0 ? ' zero' : count >= 3 ? ' good' : '');
+}
+
+function updateAllCounters(){
+  Object.keys(recurringCounts).forEach(function(id){
+    updateCounterDisplay(parseInt(id));
+  });
+}
+
+
+// ===== PRE-SHIFT AUTO-LOAD FROM AIRTABLE =====
+var AIRTABLE_READ_TOKEN = 'pat32fSDIwtx3Qu6R.f0740b1b5a443379fcda1e90b6e843a69bf0e2c431cc9971ddda44ec3efc852b';
+var AIRTABLE_BASE = 'appxwo9mmIHgSWZ8R';
+
+async function loadPreShiftSetup(teamName){
+  try {
+    var filterFormula = encodeURIComponent("Team='" + teamName + "'");
+    var url = 'https://api.airtable.com/v0/' + AIRTABLE_BASE + '/Pre-shift%20Setup?maxRecords=1&sort[0][field]=Date&sort[0][direction]=desc&filterByFormula=' + filterFormula;
+    var response = await fetch(url, {
+      headers: { 'Authorization': 'Bearer ' + AIRTABLE_READ_TOKEN }
+    });
+    var data = await response.json();
+    if(!data.records || data.records.length === 0) return false;
+    var fields = data.records[0].fields;
+
+    // Set day of week
+    if(fields.Day){
+      var dayMap = {
+        'Friday or Saturday': 'fs',
+        'Wednesday or Thursday': 'wts',
+        'Monday, Tuesday, or Sunday': 'mt'
+      };
+      var dayVal = dayMap[fields.Day];
+      if(dayVal){
+        var ds = document.getElementById('daySelect');
+        if(ds){ ds.value = dayVal; updateMarginBar(); }
+      }
+    }
+
+    // Set roles
+    var roleMap2 = {'Pricing':'pricing','Bidding':'bidding','Both':'both','Off':'off'};
+    if(fields['Role J']){
+      var rv = roleMap2[fields['Role J']] || 'off';
+      var sel = document.getElementById('roleJsel');
+      if(sel){ sel.value = rv; setRole('j', rv); }
+    }
+    if(fields['Role M']){
+      var rv2 = roleMap2[fields['Role M']] || 'off';
+      var sel2 = document.getElementById('roleMsel');
+      if(sel2){ sel2.value = rv2; setRole('m', rv2); }
+    }
+    if(fields['Role P']){
+      var rv3 = roleMap2[fields['Role P']] || 'off';
+      var sel3 = document.getElementById('rolePsel');
+      if(sel3){ sel3.value = rv3; setRole('p', rv3); }
+    }
+
+    // Set Lane 3 tasks
+    var taskCtr2 = Date.now();
+    ['j','m','p'].forEach(function(p, pi){
+      var key = ['Tasks J','Tasks M','Tasks P'][pi];
+      if(fields[key] && fields[key].trim()){
+        var lines = fields[key].trim().split('\n').filter(function(l){ return l.trim(); });
+        assignTasks[p] = lines.map(function(line, i){
+          return {id:'at_'+p+'_'+i+'_'+taskCtr2, text:line.trim(), done:false};
+        });
+      } else {
+        assignTasks[p] = [];
+      }
+      renderAssignTasks(p);
+    });
+
+    updateProgress();
+    saveState();
+    return true;
+  } catch(e){
+    console.log('Pre-shift load failed:', e);
+    return false;
+  }
+}
+// ===== INIT (runs after DOM is fully loaded) =====
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('dateBadge').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  buildDirTable();
+  renderLogs();
+  ['j','m','p'].forEach(function(p){renderAssignTasks(p);});
+
+  // Hide modal immediately
+  var modal = document.getElementById('setupModal');
+  if(modal) modal.style.display = 'none';
+
+  // Try loading pre-shift setup from Airtable
+  loadPreShiftSetup('Team B').then(function(loaded){
+    if(loaded){
+      var banner = document.getElementById('preShiftBanner');
+      if(banner) banner.style.display = 'flex';
+    } else {
+      // Nothing in Airtable — show modal or load saved state
+      var savedState = null;
+      try { savedState = localStorage.getItem('team_b_shift_state'); } catch(e){}
+      if(savedState){
+        loadState();
+      } else {
+        if(modal) modal.style.display = 'flex';
+      }
+    }
+  });
+
+  // Restore saved user
+  try {
+    var savedUser = localStorage.getItem('current_user_team_b');
+    if(savedUser){
+      var sel = document.getElementById('userSelect');
+      if(sel){ sel.value = savedUser; setUser(savedUser); }
+    }
+  } catch(e){}
+
+});
+
+// ===== AUTO-EXPAND TEXTAREAS =====
+function autoExpand(el){
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var textareas = document.querySelectorAll('.handoff-item textarea');
+  textareas.forEach(function(ta){
+    ta.addEventListener('input', function(){ autoExpand(this); });
+    autoExpand(ta);
+  });
+});
+
+// ===== SHIFT LOG — WEBHOOK =====
+var WEBHOOK_URL = 'https://hook.us2.make.com/k0kosm0exnik8p4v9rvr5000yp42iv8f';
+var TEAM_NAME = 'Team B';
+
+function getShiftSummary(){
+  var usel=document.getElementById('userSelect');
+  var person=usel&&usel.selectedIndex>0?usel.options[usel.selectedIndex].text:'Unknown';
+  var dsel=document.getElementById('daySelect');
+  var day=dsel&&dsel.selectedIndex>0?dsel.options[dsel.selectedIndex].text:'Unknown';
+  var roleMap={pricing:'Pricing',bidding:'Bidding',both:'Both',off:'Off'};
+  var roles=[];
+  ['j','m','p'].forEach(function(p){
+    var sel=document.getElementById('role'+p.toUpperCase()+'sel');
+    var nameEl=document.querySelector('#role'+p.toUpperCase()+' .role-name');
+    if(sel&&sel.value!=='off'&&nameEl)roles.push(nameEl.textContent.trim()+': '+(roleMap[sel.value]||sel.value));
+  });
+  var l1done=[...checked].filter(function(id){return id>=1&&id<=7;}).length;
+  var l2done=[...checked].filter(function(id){return id>=6&&id<=11;}).length;
+  var tas=document.querySelectorAll('.handoff-item textarea');
+  var noteLabels=['Inventory priced','Not moving','Opportunities','Open items'];
+  var notes=[];
+  tas.forEach(function(ta,i){if(ta.value.trim())notes.push(noteLabels[i]+': '+ta.value.trim());});
+  return {
+    Date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
+    Time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),
+    Team:TEAM_NAME,
+    Person:person==='Select your name'?'Unknown':person,
+    Role:roles.join(' | ')||'Unknown',
+    Day:day==='Select day'?'Unknown':day,
+    LanesCompleted:'L1: '+l1done+'/7 · L2: '+l2done+'/6',
+    UnpricedChecks:recurringCounts[2]||0,
+    NearTermReviews:recurringCounts[3]||0,
+    BidChecks:recurringCounts[6]||0,
+    SplitChecks:recurringCounts[12]||0,
+    Notes:notes.join(' | ')||'No notes'
+  };
+}
+
+async function submitToAirtable(){
+  var btn=document.getElementById('airtableBtn');
+  if(btn){btn.textContent='Saving...';btn.disabled=true;}
+  var summary=getShiftSummary();
+  try{
+    await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(summary)});
+    if(btn){btn.textContent='✓ Saved';btn.style.background='#16a34a';}
+    setTimeout(function(){if(btn){btn.textContent='Save shift to Airtable';btn.disabled=false;btn.style.background='';}},3000);
+  }catch(e){
+    if(btn){btn.textContent='Failed — try again';btn.disabled=false;btn.style.background='#dc2626';}
+    setTimeout(function(){if(btn){btn.textContent='Save shift to Airtable';btn.style.background='';}},3000);
+  }
+}
+
+</script>
+</body>
+</html>

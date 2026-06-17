@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Day — Peter Y</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f4f5;--card:#fff;--border:#e4e4e7;--border-light:#f0f0f0;
+  --text:#18181b;--text-2:#71717a;--text-3:#a1a1aa;
+  --teal:#0F6E56;--teal-light:#E1F5EE;
+  --coral:#D85A30;--coral-light:#FAECE7;
+  --amber:#BA7517;--amber-light:#FAEEDA;
+  --purple:#534AB7;--purple-light:#EEEDFE;
+  --blue:#185FA5;--blue-light:#E6F1FB;
+  --gray-off:#71717a;
+  --radius:12px;--radius-sm:8px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);min-height:100vh;color:var(--text)}
+.app{max-width:480px;margin:0 auto;padding:1.25rem 1rem 3rem}
+.header{margin-bottom:1.25rem}
+.header h1{font-size:21px;font-weight:700}
+.header p{font-size:13px;color:var(--text-2);margin-top:2px}
+
+.week-nav{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:1rem}
+.week-nav button{background:var(--bg);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;font-size:16px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center}
+.week-nav button:active{background:var(--border)}
+.week-label{font-size:13.5px;font-weight:600;text-align:center}
+.week-sub{font-size:11px;color:var(--text-3);text-align:center;margin-top:1px}
+
+.day-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:1.25rem}
+.dchip{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 2px;text-align:center;cursor:pointer}
+.dchip.on{border-color:var(--text);background:var(--text);color:#fff}
+.dchip.today{box-shadow:inset 0 0 0 2px var(--coral)}
+.dchip .dn{font-size:9.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:.03em}
+.dchip.on .dn{color:rgba(255,255,255,0.7)}
+.dchip .dd{font-size:14px;font-weight:700;margin-top:1px}
+.dchip .ds{font-size:8px;margin-top:2px;font-weight:600}
+.dchip .ds.work{color:var(--blue)}
+.dchip.on .ds.work{color:#9ec8ec}
+.dchip .ds.off{color:var(--gray-off)}
+.dchip.on .ds.off{color:rgba(255,255,255,0.7)}
+
+.day-banner{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:13px 14px;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.day-banner .dlabel{font-size:14.5px;font-weight:700}
+.day-banner .dshift{font-size:12px;color:var(--text-2);background:var(--bg);padding:4px 10px;border-radius:7px;font-weight:600}
+.day-banner .dshift.off{color:var(--gray-off)}
+
+.timeline{position:relative;padding-left:50px}
+.tblock{display:flex;align-items:flex-start;margin-bottom:8px;position:relative}
+.ttime{position:absolute;left:-50px;width:44px;font-size:11px;color:var(--text-3);text-align:right;padding-top:11px;font-weight:600}
+.tcard{flex:1;border-radius:var(--radius-sm);padding:11px 13px;border-left:3px solid transparent;background:var(--card);border:1px solid var(--border-light)}
+.tcard.b-teal{border-left-color:var(--teal)}
+.tcard.b-coral{border-left-color:var(--coral)}
+.tcard.b-amber{border-left-color:var(--amber)}
+.tcard.b-purple{border-left-color:var(--purple)}
+.tcard.b-blue{border-left-color:var(--blue)}
+.tcard.b-gray{border-left-color:var(--border)}
+.tlabel{font-size:13.5px;font-weight:600;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.tsub{font-size:12px;color:var(--text-2);margin-top:3px;line-height:1.5}
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600}
+.tag-rem{background:var(--purple-light);color:var(--purple)}
+.tag-off{background:var(--bg);color:var(--text-3);border:1px solid var(--border)}
+
+.rest-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;text-align:center}
+.rest-card .remoji{font-size:26px;margin-bottom:6px}
+.rest-card .rtitle{font-size:14.5px;font-weight:700}
+.rest-card .rsub{font-size:12.5px;color:var(--text-2);margin-top:4px;line-height:1.6}
+
+.section-label{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin:1.75rem 0 10px;font-weight:600}
+.boundary-card{background:var(--blue-light);border-radius:var(--radius);padding:13px 15px;margin-top:1.5rem}
+.boundary-card .bt{font-size:13.5px;font-weight:600;color:var(--blue);margin-bottom:4px}
+.boundary-card .bd{font-size:12.5px;color:var(--text-2);line-height:1.6}
+.setup-note{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin-top:1rem;font-size:12.5px;color:var(--text-2);line-height:1.7}
+.setup-note code{background:var(--bg);padding:2px 6px;border-radius:5px;font-family:ui-monospace,monospace;font-size:11.5px;color:var(--text);font-weight:600}
+.footer-note{text-align:center;font-size:11px;color:var(--text-3);margin-top:2rem}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <h1>My Day</h1>
+    <p>Peter Y · Worldwide Tickets</p>
+  </div>
+
+  <div class="week-nav">
+    <button onclick="changeWeek(-1)" aria-label="Previous week">‹</button>
+    <div>
+      <div class="week-label" id="weekLabel">Week of Jun 15</div>
+      <div class="week-sub" id="weekSub">Cycle week 10 of 12</div>
+    </div>
+    <button onclick="changeWeek(1)" aria-label="Next week">›</button>
+  </div>
+
+  <div class="day-strip" id="dayStrip"></div>
+
+  <div class="day-banner">
+    <span class="dlabel" id="dayLabel">Wednesday</span>
+    <span class="dshift" id="dayShift">Shift 3:00 PM – 11:00 PM</span>
+  </div>
+
+  <div id="dayContent"></div>
+
+  <div class="boundary-card">
+    <div class="bt">The one rule that protects your off days</div>
+    <div class="bd">Don't open the Airtable app or tab on days you're not on shift. If it's not open, you can't glance at it.</div>
+  </div>
+
+  <div class="section-label">Phone alarms — set once, never think about it again</div>
+  <div class="setup-note">
+    <code>9:00 PM daily</code> — Fill pre-shift form<br><br>
+    <code>Wake time</code> — Workout, right after waking, every day<br><br>
+    <code>Shift start</code> — Review yesterday's shift log, first 15 minutes
+  </div>
+
+  <div class="footer-note">Add to your phone home screen for one-tap access</div>
+
+</div>
+
+<script>
+const CYCLE_ANCHOR = new Date(2026, 3, 13);
+const CYCLE_WEEKS = 12;
+
+const SCHEDULE_CYCLE = [
+  ["3:00 PM – 11:00 PM","10:00 AM – 7:00 PM","10:00 AM – 6:00 PM","OFF","OFF","10:00 AM – 7:00 PM","10:00 AM – 4:00 PM"],
+  ["10:00 AM – 6:00 PM","OFF","10:00 AM – 6:00 PM","10:00 AM – 6:00 PM","10:00 AM – 7:00 PM","3:00 PM – 11:00 PM","OFF"],
+  ["10:00 AM – 7:00 PM","10:00 AM – 6:00 PM","3:00 PM – 11:00 PM","OFF","10:00 AM – 7:00 PM","OFF","10:00 AM – 4:00 PM"],
+  ["3:00 PM – 11:00 PM","OFF","3:00 PM – 11:00 PM","10:00 AM – 7:00 PM","OFF","10:00 AM – 7:00 PM","10:00 AM – 4:00 PM"],
+  ["3:00 PM – 11:00 PM","10:00 AM – 6:00 PM","10:00 AM – 6:00 PM","OFF","10:00 AM – 7:00 PM","10:00 AM – 7:00 PM","OFF"],
+  ["10:00 AM – 7:00 PM","OFF","10:00 AM – 7:00 PM","10:00 AM – 7:00 PM","3:00 PM – 11:00 PM","OFF","10:00 AM – 3:00 PM"],
+  ["3:00 PM – 11:00 PM","10:00 AM – 7:00 PM","10:00 AM – 6:00 PM","OFF","OFF","10:00 AM – 7:00 PM","10:00 AM – 4:00 PM"],
+  ["10:00 AM – 6:00 PM","OFF","3:00 PM – 11:00 PM","10:00 AM – 6:00 PM","10:00 AM – 7:00 PM","10:00 AM – 7:00 PM","OFF"],
+  ["10:00 AM – 7:00 PM","10:00 AM – 7:00 PM","10:00 AM – 6:00 PM","OFF","3:00 PM – 11:00 PM","OFF","10:00 AM – 4:00 PM"],
+  ["2:00 PM – 11:00 PM","OFF","3:00 PM – 11:00 PM","10:00 AM – 7:00 PM","OFF","10:00 AM – 7:00 PM","10:00 AM – 3:00 PM"],
+  ["10:00 AM – 6:00 PM","10:00 AM – 6:00 PM","10:00 AM – 6:00 PM","OFF","10:00 AM – 7:00 PM","3:00 PM – 11:00 PM","OFF"],
+  ["10:00 AM – 7:00 PM","OFF","10:00 AM – 6:00 PM","3:00 PM – 11:00 PM","10:00 AM – 7:00 PM","OFF","10:00 AM – 4:00 PM"],
+];
+
+const DAY_NAMES = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const DAY_SHORT = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
+
+function startOfWeek(d){
+  const date = new Date(d);
+  const day = date.getDay();
+  const diff = (day === 0 ? -6 : 1) - day;
+  date.setDate(date.getDate() + diff);
+  date.setHours(0,0,0,0);
+  return date;
+}
+
+function weeksBetween(a, b){
+  const ms = b.getTime() - a.getTime();
+  return Math.round(ms / (7*24*60*60*1000));
+}
+
+function getCycleWeekIndex(weekStart){
+  const anchorStart = startOfWeek(CYCLE_ANCHOR);
+  let diff = weeksBetween(anchorStart, weekStart);
+  let idx = diff % CYCLE_WEEKS;
+  if(idx < 0) idx += CYCLE_WEEKS;
+  return idx;
+}
+
+function getShiftFor(weekStart, dayIdx){
+  const cycleIdx = getCycleWeekIndex(weekStart);
+  return SCHEDULE_CYCLE[cycleIdx][dayIdx];
+}
+
+function fmtDate(d){
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function isSameDay(a,b){
+  return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+}
+
+function parseShiftStart(shiftStr){
+  if(shiftStr === "OFF") return null;
+  const m = shiftStr.match(/^(\d+):(\d+)\s*(AM|PM)/);
+  if(!m) return null;
+  let h = parseInt(m[1]);
+  const ap = m[3];
+  if(ap === "PM" && h !== 12) h += 12;
+  if(ap === "AM" && h === 12) h = 0;
+  return { h };
+}
+
+const today = new Date();
+today.setHours(0,0,0,0);
+let viewedWeekStart = startOfWeek(today);
+let selectedDay = new Date(today);
+
+function changeWeek(delta){
+  viewedWeekStart = new Date(viewedWeekStart);
+  viewedWeekStart.setDate(viewedWeekStart.getDate() + delta*7);
+  selectedDay = new Date(viewedWeekStart);
+  render();
+}
+
+function selectDay(d){
+  selectedDay = new Date(d);
+  render();
+}
+
+function buildTimelineFor(dayIdx, shiftStr){
+  const shift = parseShiftStart(shiftStr);
+  const isFri = dayIdx === 4;
+
+  if(!shift){
+    return `
+      <div class="rest-card">
+        <div class="remoji">Off</div>
+        <div class="rtitle">Off today</div>
+        <div class="rsub">No alarm. Wake whenever, workout whenever feels right.<br>Airtable stays closed — Andrew and the team have it covered.</div>
+      </div>
+      <div class="timeline" style="margin-top:14px">
+        <div class="tblock"><span class="ttime">9:00</span><div class="tcard b-purple"><div class="tlabel">Pre-shift form — only if no one else is covering it<span class="tag tag-rem">Reminder</span></div></div></div>
+      </div>
+    `;
+  }
+
+  const startH = shift.h;
+  const isAfternoonStart = startH >= 13;
+  const wakeLabel = isAfternoonStart ? "9:00" : "7:45";
+  const workoutLabel = isAfternoonStart ? "9:00" : "8:00";
+  const breakfastLabel = isAfternoonStart ? "10:30" : "9:00";
+  const checkinLabel = isAfternoonStart ? "1:00" : null;
+  const shiftStartDisplay = shiftStr.split(" – ")[0];
+  const shiftEndDisplay = shiftStr.split(" – ")[1];
+
+  let html = '<div class="timeline">';
+  html += '<div class="tblock"><span class="ttime">'+wakeLabel+'</span><div class="tcard b-teal"><div class="tlabel">Wake up</div></div></div>';
+  html += '<div class="tblock"><span class="ttime">'+workoutLabel+'</span><div class="tcard b-coral"><div class="tlabel">Workout</div><div class="tsub">Right after waking — no dead time before it</div></div></div>';
+  html += '<div class="tblock"><span class="ttime">'+breakfastLabel+'</span><div class="tcard b-gray"><div class="tlabel">Breakfast / get ready</div></div></div>';
+
+  if(checkinLabel){
+    html += '<div class="tblock"><span class="ttime">'+checkinLabel+'</span><div class="tcard b-blue"><div class="tlabel">Quick check-in<span class="tag tag-off">Light touch</span></div><div class="tsub">Not your shift yet — just glance for anything flagged urgent overnight</div></div></div>';
+  }
+
+  html += '<div class="tblock"><span class="ttime">'+shiftStartDisplay+'</span><div class="tcard b-amber"><div class="tlabel">Shift starts — review yesterday\'s shift log</div><div class="tsub">First 15 minutes, every shift day, same order'+(isFri ? '. Plus a flag-only check around midday — push day.' : '')+'</div></div></div>';
+  html += '<div class="tblock"><span class="ttime">'+shiftEndDisplay+'</span><div class="tcard b-gray"><div class="tlabel">Shift ends</div></div></div>';
+  html += '<div class="tblock"><span class="ttime">9:00</span><div class="tcard b-purple"><div class="tlabel">Pre-shift form — tomorrow\'s setup<span class="tag tag-rem">Reminder</span></div><div class="tsub">Team A + Team B, same time every night</div></div></div>';
+  html += '</div>';
+  return html;
+}
+
+function render(){
+  document.getElementById('weekLabel').textContent = 'Week of ' + fmtDate(viewedWeekStart);
+  const cycleIdx = getCycleWeekIndex(viewedWeekStart);
+  document.getElementById('weekSub').textContent = 'Cycle week ' + (cycleIdx+1) + ' of ' + CYCLE_WEEKS;
+
+  const strip = document.getElementById('dayStrip');
+  strip.innerHTML = '';
+  for(let i=0;i<7;i++){
+    const d = new Date(viewedWeekStart);
+    d.setDate(d.getDate()+i);
+    const shiftStr = getShiftFor(viewedWeekStart, i);
+    const isOff = shiftStr === "OFF";
+    const isSelected = isSameDay(d, selectedDay);
+    const isToday = isSameDay(d, today);
+    const chip = document.createElement('div');
+    chip.className = 'dchip' + (isSelected ? ' on' : '') + (isToday ? ' today' : '');
+    chip.onclick = (function(dd){ return function(){ selectDay(dd); }; })(d);
+    const shiftShort = isOff ? 'OFF' : shiftStr.split(' – ')[0].replace(' ','');
+    chip.innerHTML = '<div class="dn">'+DAY_SHORT[i]+'</div><div class="dd">'+d.getDate()+'</div><div class="ds '+(isOff?'off':'work')+'">'+shiftShort+'</div>';
+    strip.appendChild(chip);
+  }
+
+  let selDayIdx = selectedDay.getDay() === 0 ? 6 : selectedDay.getDay()-1;
+  const selWeekStart = startOfWeek(selectedDay);
+  if(selWeekStart.getTime() !== viewedWeekStart.getTime()){
+    selDayIdx = 0;
+  }
+
+  const shiftStr = getShiftFor(viewedWeekStart, selDayIdx);
+  const isOff = shiftStr === "OFF";
+  const displayDate = new Date(viewedWeekStart);
+  displayDate.setDate(displayDate.getDate()+selDayIdx);
+
+  document.getElementById('dayLabel').textContent = DAY_NAMES[selDayIdx] + (isSameDay(displayDate, today) ? ' · Today' : '');
+  const dshiftEl = document.getElementById('dayShift');
+  if(isOff){
+    dshiftEl.textContent = 'Off today';
+    dshiftEl.classList.add('off');
+  } else {
+    dshiftEl.textContent = 'Shift ' + shiftStr;
+    dshiftEl.classList.remove('off');
+  }
+
+  document.getElementById('dayContent').innerHTML = buildTimelineFor(selDayIdx, shiftStr);
+}
+
+render();
+</script>
+</body>
+</html>

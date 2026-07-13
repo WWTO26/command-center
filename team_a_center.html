@@ -169,29 +169,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-primary{background:var(--blue)!important;color:#fff!important;border-color:var(--blue)!important}
 .btn-ghost{color:var(--text-3)!important;margin-left:auto}
 
-/* MARKET DIRECTION TAB */
-.dir-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:1rem;box-shadow:var(--shadow)}
-.dir-card h3{font-size:13px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
-.dir-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
-.dir-inp-group{background:var(--bg);border-radius:var(--radius-sm);padding:8px 10px}
-.dir-inp-group label{font-size:11px;color:var(--text-3);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
-.dir-inp-group select{width:100%;font-size:13px;padding:6px 8px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;color:var(--text)}
-.dir-result{border-radius:var(--radius-sm);padding:12px 14px;font-size:14px;font-weight:600;transition:all .2s}
-.dr-default{background:var(--bg);color:var(--text-3)}
-.dr-up{background:var(--green-light);color:var(--green);border:1px solid var(--green-mid)}
-.dr-down{background:var(--red-light);color:var(--red);border:1px solid var(--red-mid)}
-.dr-flat{background:var(--amber-light);color:var(--amber);border:1px solid var(--amber-mid)}
-.dr-sub{font-size:12px;font-weight:400;margin-top:4px;opacity:.8}
-.dir-table-wrap{overflow-x:auto;margin-top:1rem}
-.dir-table{width:100%;border-collapse:collapse;font-size:12px}
-.dir-table th{font-size:11px;font-weight:600;color:var(--text-2);text-align:left;padding:6px 8px;background:var(--bg);border-bottom:1px solid var(--border)}
-.dir-table td{padding:6px 8px;border-bottom:1px solid var(--border-light);color:var(--text-2)}
-.dir-table tr.highlight td{background:var(--blue-light);color:var(--text)}
-.res-up{color:var(--green);font-weight:600}
-.res-down{color:var(--red);font-weight:600}
-.res-flat{color:var(--amber);font-weight:600}
-.res-collapse{color:var(--red);font-weight:600;font-style:italic}
-
 /* LOG TAB */
 .log-form{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:1rem;box-shadow:var(--shadow)}
 .log-form h3{font-size:13px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
@@ -268,6 +245,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .task-counter{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--blue-mid);color:var(--blue);font-size:11px;font-weight:700;border:1.5px solid var(--blue);transition:all .2s}
 .task-counter.zero{background:var(--bg);color:var(--text-3);border-color:var(--border)}
 .task-counter.good{background:var(--green-mid);color:var(--green);border-color:var(--green)}
+
+/* ADJUSTMENTS TAB */
+.adj-intro{margin-bottom:12px}
+.adj-intro h3{font-size:15px;font-weight:700;color:var(--text)}
+.adj-help{font-size:12px;color:var(--text-2);margin-top:2px}
+.adj-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:1rem;box-shadow:var(--shadow)}
+.adj-label{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;display:block}
+.adj-chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.adj-chip{font-size:12px;padding:6px 12px;border-radius:16px;border:1.5px solid var(--border);background:#fff;color:var(--text-2);cursor:pointer;font-weight:500;transition:all .15s}
+.adj-chip:hover{border-color:var(--blue)}
+.adj-chip.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.adj-newevent-row{display:flex;gap:6px}
+.adj-newevent-row input{flex:1;font-size:13px;padding:7px 10px;border-radius:var(--radius-sm);border:1px solid var(--border)}
+.adj-add-btn{font-size:12px;padding:7px 14px;border-radius:var(--radius-sm);border:none;background:var(--purple);color:#fff;font-weight:600;cursor:pointer;white-space:nowrap}
+.adj-active-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.adj-active-name{font-size:14px;font-weight:700;color:var(--blue)}
+.adj-field-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:4px}
+.adj-field-col{min-width:140px}
+.adj-margin-input{width:120px;font-size:14px;font-weight:600;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border)}
+.adj-preset-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.adj-preset-btn{font-size:12px;padding:7px 12px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:#fff;color:var(--text);cursor:pointer;font-weight:500}
+.adj-preset-btn:hover{border-color:var(--purple);color:var(--purple)}
+.adj-note{width:100%;font-size:13px;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);resize:vertical;min-height:44px;margin-bottom:6px;font-family:inherit}
+.adj-validation{font-size:12px;color:var(--red);margin-bottom:8px}
+.adj-save-btn{width:100%;font-size:14px;font-weight:700;padding:10px;border-radius:var(--radius-sm);border:none;background:var(--blue);color:#fff;cursor:pointer}
+.adj-save-btn:disabled{opacity:.6}
+.adj-today-log{margin-top:14px;border-top:1px solid var(--border-light);padding-top:10px}
+.adj-log-row{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--text-2);padding:5px 0;border-bottom:1px solid var(--border-light)}
+.adj-log-row:last-child{border-bottom:none}
+.adj-log-time{color:var(--text-3);flex-shrink:0}
 </style>
 </head>
 <body>
@@ -387,8 +394,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('shift')">Shift</button>
-    <button class="tab-btn" onclick="switchTab('market')">Market Advice</button>
-    
+    <button class="tab-btn" onclick="switchTab('adjust')">Adjustments</button>
   </div>
 
   <!-- ==================== SHIFT PANEL ==================== -->
@@ -475,7 +481,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
         <div class="lane-meta">
           <span class="lane-owner lo-pricing" id="l1owner">—</span>
-          
+
         </div>
       </div>
       <div class="lane-prog"><div class="lane-prog-fill lp-blue" id="lp1" style="width:0%"></div></div>
@@ -506,8 +512,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <div class="cb" id="cb4"></div>
           <div class="t-wrap">
             <div class="t-main">Analyze each event — is it going up or down?</div>
-            <div class="t-sub">Check sales velocity, supply, and price direction on SG. Use the Market Direction tab to identify the signal. What day of week is the event? Friday/Saturday = be more aggressive. Monday/Tuesday = be more defensive. Price accordingly.
-            <div class="t-tags"><span class="ttag tt-watch">Use market direction tool</span></div></div>
+            <div class="t-sub">Check sales velocity, supply, and price direction on SG. What day of week is the event? Friday/Saturday = be more aggressive. Monday/Tuesday = be more defensive. Price accordingly.</div>
           </div>
         </div>
         <div data-id="5" data-recurring="30" onclick="toggle(5)" class="task task-recurring">
@@ -547,7 +552,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
         <div class="lane-meta">
           <span class="lane-owner lo-bidding" id="l2owner">—</span>
-          
+
         </div>
       </div>
       <div class="lane-prog"><div class="lane-prog-fill lp-green" id="lp2" style="width:0%"></div></div>
@@ -639,7 +644,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <div class="lane-sub">Not urgent today but moves the operation forward. Manager assigns tasks per person below.</div>
         </div>
         <div class="lane-meta">
-          
+
         </div>
       </div>
       <div class="lane-prog"><div class="lane-prog-fill lp-purple" id="lp3" style="width:0%"></div></div>
@@ -751,63 +756,61 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <span style="font-size:16px">📸</span>
       <span style="font-size:13px;color:var(--text-2)">Take a screenshot of this page and drop it in the Teams group chat as your shift record.</span>
     </div>
-      
+
     </div>
     <div class="bottom-bar">
       <button class="btn-primary" onclick="window.open('https://docs.google.com/spreadsheets/d/17XEsm61aEHqwLwyRXtPk9m9ZnNJ1DLQMTBr2hzcGQ6c/edit','_blank')">Open shift log ↗</button>
-      <button onclick="switchTab('market')">Check market direction ↗</button>
       <button class="btn-ghost" onclick="resetShift()">↺ Reset shift</button>
       <button id="airtableBtn" onclick="submitToAirtable()" style="font-size:13px;padding:8px 18px;border-radius:6px;border:none;background:#6366f1;color:#fff;cursor:pointer;font-weight:600;margin-left:auto">Save shift to Airtable ↗</button>
     </div>
 
   </div>
 
-  <!-- ==================== MARKET DIRECTION PANEL ==================== -->
-  <div class="panel" id="panel-market">
-    <div class="dir-card">
-      <h3>Market direction &amp; advice</h3>
-      <div style="font-size:12px;color:var(--text-2);background:var(--bg);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:12px;line-height:1.7;border-left:3px solid var(--blue)">
-        Use this as a guide — not a rule. Select what you're seeing on Uptick right now: sales velocity, supply of listings, and price movement. The tool tells you the likely direction and what to do. When in doubt, always check with the manager before making big moves.
-      </div>
-      <div class="dir-inputs">
-        <div class="dir-inp-group">
-          <label>Sales velocity</label>
-          <select id="dSale" onchange="calcDir()">
-            <option value="">Select</option>
-            <option value="up">↑ Up</option>
-            <option value="down">↓ Down</option>
-            <option value="flat">→ Flat</option>
-          </select>
-        </div>
-        <div class="dir-inp-group">
-          <label>Supply</label>
-          <select id="dSupply" onchange="calcDir()">
-            <option value="">Select</option>
-            <option value="up">↑ Up (more listings)</option>
-            <option value="down">↓ Down (fewer listings)</option>
-            <option value="flat">→ Flat</option>
-          </select>
-        </div>
-        <div class="dir-inp-group">
-          <label>Price movement</label>
-          <select id="dPrice" onchange="calcDir()">
-            <option value="">Select</option>
-            <option value="up">↑ Up</option>
-            <option value="down">↓ Down</option>
-            <option value="flat">→ Flat</option>
-          </select>
-        </div>
-      </div>
-      <div class="dir-result dr-default" id="dirResult">
-        <div>Select all three signals above to get market direction and what to do.</div>
+  <!-- ==================== ADJUSTMENTS PANEL ==================== -->
+  <div class="panel" id="panel-adjust">
+    <div class="adj-intro">
+      <h3>Log an adjustment</h3>
+      <div class="adj-help">Tap the event, set optimization + margin, hit Save. That's it.</div>
+    </div>
+
+    <div class="adj-card">
+      <div class="adj-label">Today's events</div>
+      <div class="adj-chip-row" id="adjEventChips"></div>
+      <div class="adj-newevent-row">
+        <input type="text" id="adjNewEventName" placeholder="+ New event name">
+        <button class="adj-add-btn" onclick="adjAddEvent()">Add</button>
       </div>
     </div>
-    <div class="dir-card">
-      <h3>Full reference table</h3>
-      <div class="dir-table-wrap">
-        <table class="dir-table"><thead><tr><th>Sales</th><th>Supply</th><th>Price</th><th>Direction</th><th>Action</th></tr></thead>
-        <tbody id="dirTableBody"></tbody></table>
+
+    <div class="adj-card" id="adjActiveCard" style="display:none">
+      <div class="adj-active-head">
+        <div><span class="adj-label">Logging for</span> <span id="adjActiveEventName" class="adj-active-name"></span></div>
+        <div class="adj-chip-row" id="adjMarketChips"></div>
       </div>
+
+      <div class="adj-field-row">
+        <div class="adj-field-col">
+          <div class="adj-label">Optimization</div>
+          <div class="adj-chip-row">
+            <button class="adj-chip" id="adjOptY" onclick="adjSetOpt('Y')">Y</button>
+            <button class="adj-chip" id="adjOptN" onclick="adjSetOpt('N')">N</button>
+          </div>
+        </div>
+        <div class="adj-field-col">
+          <div class="adj-label">Margin</div>
+          <input type="text" id="adjMarginInput" class="adj-margin-input" placeholder="e.g. 25 or 20-25">
+        </div>
+      </div>
+
+      <div class="adj-label" style="margin-top:6px">What did you do? (optional)</div>
+      <div class="adj-preset-row" id="adjPresetRow"></div>
+
+      <textarea id="adjNoteText" class="adj-note" placeholder="Notes (optional)..."></textarea>
+
+      <div id="adjValidationMsg" class="adj-validation" style="display:none">Set Optimization (Y/N) and Margin before saving.</div>
+      <button class="adj-save-btn" id="adjSaveBtn" onclick="adjSaveEntry()">Save adjustment</button>
+
+      <div id="adjTodayLog" class="adj-today-log"></div>
     </div>
   </div>
 
@@ -894,7 +897,7 @@ var logs=[];
 
 // ===== TABS =====
 function switchTab(t){
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['shift','market'][i]===t));
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['shift','adjust'][i]===t));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('panel-'+t).classList.add('active');
 }
@@ -978,83 +981,6 @@ function updateProgress(){
   ['j','m','p'].forEach(function(p){for(var i=0;i<assignTasks[p].length;i++){l3total++;if(assignTasks[p][i].done)l3done++;}});
   var l3pct=l3total>0?Math.round((l3done/l3total)*100):0;
   if(document.getElementById('lp3'))document.getElementById('lp3').style.width=l3pct+'%';
-}
-
-// ===== MARKET DIRECTION =====
-var matrix=[
-  ['up','up','up','flat','Hold — don\'t push harder, market will flatten'],
-  ['up','up','down','flat','Hold current strategy, market finding equilibrium'],
-  ['up','up','flat','down','Be defensive — more supply coming, expect price to drop'],
-  ['up','down','up','up','Be aggressive — strong signal, price moving up'],
-  ['up','down','down','up (potential spike)','Push bids — supply falling with strong sales = spike potential'],
-  ['up','down','flat','up (spike)','Act now — classic spike setup, move fast'],
-  ['up','flat','up','up (potential spike)','Lean aggressive, sales strong and price rising'],
-  ['up','flat','down','flat','Hold — mixed signals, monitor closely'],
-  ['up','flat','flat','up','Positive signal — can push slightly harder'],
-  ['down','up','up','down (collapse)','Cut bids and reprice down — collapse likely'],
-  ['down','up','down','down','Be defensive, reduce exposure'],
-  ['down','up','flat','down (collapse)','High risk — cut bids, consider killing offers'],
-  ['down','down','up','flat','Mixed — hold, watch velocity'],
-  ['down','down','down','down','Reduce exposure, don\'t accumulate more'],
-  ['down','down','flat','down (collapse)','Exit or cut — all signals negative'],
-  ['down','flat','up','down','Be cautious — sales dropping despite price rise'],
-  ['down','flat','down','down','Reduce bids and price down'],
-  ['down','flat','flat','down (collapse)','Cut positions — no positive signals'],
-  ['flat','up','up','down','Supply outpacing demand — price will fall'],
-  ['flat','up','down','down','Weakening — reduce exposure'],
-  ['flat','up','flat','down (collapse)','Be defensive — supply pressure building'],
-  ['flat','down','up','up (potential spike)','Watch closely — supply tightening with price up'],
-  ['flat','down','down','flat','Balanced — hold strategy'],
-  ['flat','down','flat','flat','Neutral — hold current position'],
-  ['flat','flat','up','up','Price rising on its own — can lean aggressive'],
-  ['flat','flat','down','down','Price softening — adjust down'],
-  ['flat','flat','flat','flat','Stable — hold current strategy']
-];
-function resClass(r){
-  if(r.includes('collapse'))return 'res-collapse';
-  if(r.includes('up'))return 'res-up';
-  if(r.includes('down'))return 'res-down';
-  return 'res-flat';
-}
-function buildDirTable(){
-  var tbody=document.getElementById('dirTableBody');
-  var html='';
-  for(var i=0;i<matrix.length;i++){
-    var r=matrix[i];
-    var rowId='drow-'+r[0]+'-'+r[1]+'-'+r[2];
-    html+='<tr id="'+rowId+'">';
-    html+='<td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td>';
-    html+='<td class="'+resClass(r[3])+'">'+r[3]+'</td>';
-    html+='<td style="color:var(--text-2);font-size:11px">'+r[4]+'</td>';
-    html+='</tr>';
-  }
-  tbody.innerHTML=html;
-}
-function calcDir(){
-  var s=document.getElementById('dSale').value;
-  var su=document.getElementById('dSupply').value;
-  var p=document.getElementById('dPrice').value;
-  var box=document.getElementById('dirResult');
-  var rows=document.querySelectorAll('.dir-table tbody tr');
-  for(var i=0;i<rows.length;i++)rows[i].classList.remove('highlight');
-  if(!s||!su||!p){
-    box.className='dir-result dr-default';
-    box.innerHTML='<div>Select all three signals to get direction.</div>';
-    return;
-  }
-  var match=null;
-  for(var i=0;i<matrix.length;i++){
-    if(matrix[i][0]===s&&matrix[i][1]===su&&matrix[i][2]===p){match=matrix[i];break;}
-  }
-  if(!match)return;
-  var rowId='drow-'+s+'-'+su+'-'+p;
-  var row=document.getElementById(rowId);
-  if(row){row.classList.add('highlight');row.scrollIntoView({block:'nearest',behavior:'smooth'});}
-  var res=match[3];
-  var action=match[4];
-  var cls=(res.indexOf('collapse')>-1||res.indexOf('down')>-1)?'dr-down':(res.indexOf('up')>-1?'dr-up':'dr-flat');
-  box.className='dir-result '+cls;
-  box.innerHTML='<div>Direction: <strong>'+res+'</strong></div><div class="dr-sub">'+action+'</div>';
 }
 
 // ===== LOG =====
@@ -1389,14 +1315,13 @@ async function loadPreShiftSetup(teamName){
 // ===== INIT (runs after DOM is fully loaded) =====
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('dateBadge').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  buildDirTable();
   renderLogs();
   ['j','m','p'].forEach(function(p){renderAssignTasks(p);});
   updateDimrDayBadge();
   // Hide modal immediately, show only if fetch fails
   var modal = document.getElementById('setupModal');
   if(modal) modal.style.display = 'none';
-  
+
   // Try to load pre-shift setup from Airtable
   loadPreShiftSetup('Team A').then(function(loaded){
     if(loaded){
@@ -1491,6 +1416,136 @@ async function submitToAirtable(){
     setTimeout(function(){if(btn){btn.textContent='Save shift to Airtable';btn.style.background='';}},3000);
   }
 }
+
+// ===== ADJUSTMENTS TAB =====
+var ADJ_TEAM = 'A';
+var ADJ_STORAGE_KEY = 'adj_events_' + ADJ_TEAM + '_' + new Date().toDateString();
+var adjEvents = {};
+var adjActiveEvent = null;
+var adjPresets = ['Raised max price','Lowered max price','Split change','Killed early'];
+
+function adjLoad(){
+  try{ var raw=localStorage.getItem(ADJ_STORAGE_KEY); adjEvents = raw?JSON.parse(raw):{}; }catch(e){ adjEvents={}; }
+}
+function adjPersist(){
+  try{ localStorage.setItem(ADJ_STORAGE_KEY, JSON.stringify(adjEvents)); }catch(e){}
+}
+function adjCurrentTrader(){
+  var usel=document.getElementById('userSelect');
+  return (usel && usel.selectedIndex>0) ? usel.options[usel.selectedIndex].text : 'Unknown';
+}
+function adjRenderChips(){
+  var wrap=document.getElementById('adjEventChips');
+  if(!wrap) return;
+  wrap.innerHTML='';
+  Object.keys(adjEvents).forEach(function(name){
+    var c=document.createElement('button');
+    c.className='adj-chip'+(name===adjActiveEvent?' active':'');
+    c.textContent=name;
+    c.onclick=function(){ adjSelectEvent(name); };
+    wrap.appendChild(c);
+  });
+}
+function adjAddEvent(){
+  var val=document.getElementById('adjNewEventName').value.trim();
+  if(!val) return;
+  if(!adjEvents[val]){ adjEvents[val]={margin:'',optimization:'',market:'',entries:[]}; adjPersist(); }
+  document.getElementById('adjNewEventName').value='';
+  adjRenderChips();
+  adjSelectEvent(val);
+}
+function adjSetOpt(val){
+  var ev=adjEvents[adjActiveEvent];
+  if(!ev) return;
+  ev.optimization=val;
+  document.getElementById('adjOptY').classList.toggle('active',val==='Y');
+  document.getElementById('adjOptN').classList.toggle('active',val==='N');
+}
+function adjSelectEvent(name){
+  adjActiveEvent=name;
+  adjRenderChips();
+  var ev=adjEvents[name];
+  document.getElementById('adjActiveCard').style.display='block';
+  document.getElementById('adjActiveEventName').textContent=name;
+  document.getElementById('adjMarginInput').value=ev.margin||'';
+  document.getElementById('adjOptY').classList.toggle('active',ev.optimization==='Y');
+  document.getElementById('adjOptN').classList.toggle('active',ev.optimization==='N');
+  document.getElementById('adjValidationMsg').style.display='none';
+  adjRenderMarketChips();
+  adjRenderPresets();
+  adjRenderTodayLog();
+  document.getElementById('adjNoteText').value='';
+}
+function adjRenderMarketChips(){
+  var wrap=document.getElementById('adjMarketChips');
+  wrap.innerHTML='';
+  var ev=adjEvents[adjActiveEvent];
+  ['Up','Down','Flat'].forEach(function(m){
+    var c=document.createElement('button');
+    c.className='adj-chip'+(ev.market===m?' active':'');
+    c.textContent=(m==='Up'?'↑ ':m==='Down'?'↓ ':'→ ')+m;
+    c.onclick=function(){ ev.market=m; adjPersist(); adjRenderMarketChips(); };
+    wrap.appendChild(c);
+  });
+}
+function adjRenderPresets(){
+  var wrap=document.getElementById('adjPresetRow');
+  wrap.innerHTML='';
+  adjPresets.forEach(function(p){
+    var b=document.createElement('button');
+    b.className='adj-preset-btn';
+    b.textContent=p;
+    b.onclick=function(){ document.getElementById('adjNoteText').value=p; };
+    wrap.appendChild(b);
+  });
+}
+function adjRenderTodayLog(){
+  var wrap=document.getElementById('adjTodayLog');
+  var ev=adjEvents[adjActiveEvent];
+  if(!ev.entries.length){ wrap.innerHTML='<div style="font-size:12px;color:var(--text-3)">No adjustments logged yet today.</div>'; return; }
+  wrap.innerHTML='<div class="adj-label">Logged today</div>' + ev.entries.slice().reverse().map(function(e){
+    return '<div class="adj-log-row"><span>Opt '+e.optimization+' — '+e.margin+(e.notes?(' — '+e.notes):'')+'</span><span class="adj-log-time">'+e.time+'</span></div>';
+  }).join('');
+}
+async function adjSaveEntry(){
+  if(!adjActiveEvent) return;
+  var ev=adjEvents[adjActiveEvent];
+  var margin=document.getElementById('adjMarginInput').value.trim();
+  var notes=document.getElementById('adjNoteText').value.trim();
+  var optimization=ev.optimization||'';
+  var msg=document.getElementById('adjValidationMsg');
+  if(!margin || !optimization){ msg.style.display='block'; return; }
+  msg.style.display='none';
+  ev.margin=margin;
+  var now=new Date();
+  var timeStr=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  ev.entries.push({margin:margin,optimization:optimization,notes:notes,time:timeStr});
+  adjPersist();
+  var btn=document.getElementById('adjSaveBtn');
+  btn.textContent='Saving...'; btn.disabled=true;
+  var payload={
+    Event:adjActiveEvent,
+    Team:ADJ_TEAM,
+    Trader:adjCurrentTrader(),
+    Optimization:optimization,
+    Margin:margin,
+    'Market Direction':ev.market||'',
+    Notes:notes,
+    'Logged At':now.toISOString(),
+    LogType:'adjustment'
+  };
+  try{
+    await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    btn.textContent='✓ Saved'; btn.style.background='#16a34a';
+  }catch(e){
+    btn.textContent='Failed — try again'; btn.style.background='#dc2626';
+  }
+  setTimeout(function(){ btn.textContent='Save adjustment'; btn.disabled=false; btn.style.background=''; },1500);
+  document.getElementById('adjNoteText').value='';
+  adjRenderTodayLog();
+}
+adjLoad();
+document.addEventListener('DOMContentLoaded', function(){ adjRenderChips(); });
 </script>
 </body>
 </html>
